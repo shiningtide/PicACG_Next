@@ -1,6 +1,20 @@
 {
   "app": {
-    "signingConfigs": [],
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "/Users/luxcis/.ohos/config/default_PicACG_Next_6M-O6evONjmTiizrY02h1PpXZE1jcb6aYVieMf-4Wno=.cer",
+          "storePassword": "0000001AA174F33FCD639F5E83AB5A18BE339EFD9328595089CF5C07F3733470157D26807D891EF053FE",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001A7C35D260E00AC0B063E27A014023FC089F56732DE1BDF67CCCD01ACFDAE9C5C48A57BAE20771",
+          "profile": "/Users/luxcis/.ohos/config/default_PicACG_Next_6M-O6evONjmTiizrY02h1PpXZE1jcb6aYVieMf-4Wno=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "/Users/luxcis/.ohos/config/default_PicACG_Next_6M-O6evONjmTiizrY02h1PpXZE1jcb6aYVieMf-4Wno=.p12"
+        }
+      }
+    ],
     "products": [
       {
         "name": "default",
