@@ -1,4 +1,4 @@
-export interface PicaResponse<T = ESObject> {
+export interface PicaResponse<T> {
   code: number
   message: string
   error?: string
@@ -6,10 +6,10 @@ export interface PicaResponse<T = ESObject> {
   data?: T
 }
 
-export const TOKEN_KEY = 'authorization'
-
-export type RequestMethod = 'GET' | 'POST'
-
-export const Ok = 200
-
-export const Unauthorized = 401
+export interface PicaPage<T> {
+  docs: T[]
+  page: number
+  pages: number
+  total: number
+  limit: number
+}

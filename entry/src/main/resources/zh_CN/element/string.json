@@ -11,6 +11,10 @@
     {
       "name": "EntryAbility_label",
       "value": "哔咔漫画"
+    },
+    {
+      "name": "permission_reason_INTERNET",
+      "value": "请求网络权限"
     }
   ]
 }

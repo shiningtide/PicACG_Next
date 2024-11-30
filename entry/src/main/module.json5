@@ -31,6 +31,19 @@
           }
         ]
       }
-    ]
+    ],
+    "requestPermissions": [
+      {
+        "name": "ohos.permission.INTERNET",
+        "reason": "$string:permission_reason_INTERNET",
+        "usedScene": {
+          "when": "inuse",
+          "abilities": [
+            "HomeAbility"
+          ]
+        }
+      }
+    ],
+    "routerMap": "$profile:route_map"
   }
 }

@@ -11,6 +11,10 @@
     {
       "name": "EntryAbility_label",
       "value": "Pica Comic"
+    },
+    {
+      "name": "permission_reason_INTERNET",
+      "value": "For web browsing"
     }
   ]
 }

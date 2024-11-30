@@ -2,44 +2,48 @@ import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { display, window } from '@kit.ArkUI';
 import { BusinessError } from '@ohos.base';
-import { AppUtil } from '@pura/harmony-utils';
+import { AppUtil, LogUtil } from '@pura/harmony-utils';
+import { TOKEN_KEY } from '../utils/consts';
 
 export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
-    hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
+    hilog.info(0x0000, 'PicaAbilityLog', '%{public}s', 'Ability onCreate');
     AppUtil.init(this.context);
+    LogUtil.init(0x0000, 'PicaLog', true)
   }
 
   onDestroy(): void {
-    hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onDestroy');
+    hilog.info(0x0000, 'PicaAbilityLog', '%{public}s', 'Ability onDestroy');
   }
 
   onWindowStageCreate(windowStage: window.WindowStage): void {
     // Main window is created, set main page for this ability
-    hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
+    hilog.info(0x0000, 'PicaAbilityLog', '%{public}s', 'Ability onWindowStageCreate');
 
-    windowStage.loadContent('pages/view/Login', (err) => {
+    windowStage.loadContent('pages/Index', (err) => {
       if (err.code) {
-        hilog.error(0x0000, 'testTag', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err) ?? '');
+        hilog.error(0x0000, 'PicaAbilityLog', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err) ?? '');
         return;
       }
-      hilog.info(0x0000, 'testTag', 'Succeeded in loading the content.');
+      hilog.info(0x0000, 'PicaAbilityLog', 'Succeeded in loading the content.');
+      // 初始化变量
+      PersistentStorage.persistProp(TOKEN_KEY, '');
     });
 
     // 全屏
     windowStage.getMainWindow((err, windowClass) => {
       if (err.code) {
-        hilog.error(0x0000, 'testTag', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err) ?? '');
+        hilog.error(0x0000, 'PicaAbilityLog', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err) ?? '');
         return
       }
 
       //全屏
       windowClass.setWindowLayoutFullScreen(true)
         .then(() => {
-          console.info('Succeeded in setting the window layout to full-screen mode.');
+          LogUtil.info('Succeeded in setting the window layout to full-screen mode.');
         })
         .catch((err: BusinessError) => {
-          console.error('Failed to set the window layout to full-screen mode. Cause:' + JSON.stringify(err));
+          LogUtil.error('Failed to set the window layout to full-screen mode. Cause:' + JSON.stringify(err));
         });
       //获取上下遮挡区域
       let type = window.AvoidAreaType.TYPE_NAVIGATION_INDICATOR; //导航栏
@@ -71,16 +75,16 @@ export default class EntryAbility extends UIAbility {
 
   onWindowStageDestroy(): void {
     // Main window is destroyed, release UI related resources
-    hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onWindowStageDestroy');
+    hilog.info(0x0000, 'PicaAbilityLog', '%{public}s', 'Ability onWindowStageDestroy');
   }
 
   onForeground(): void {
     // Ability has brought to foreground
-    hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onForeground');
+    hilog.info(0x0000, 'PicaAbilityLog', '%{public}s', 'Ability onForeground');
   }
 
   onBackground(): void {
     // Ability has back to background
-    hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onBackground');
+    hilog.info(0x0000, 'PicaAbilityLog', '%{public}s', 'Ability onBackground');
   }
 }
