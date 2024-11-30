@@ -1,4 +1,4 @@
-import { http } from '../utils/http'
+import { HttpUtil } from '../utils/http'
 
 interface LoginRequest {
   email: string
@@ -10,5 +10,5 @@ interface LoginResponse {
 }
 
 export const UserLogin = (data: LoginRequest): Promise<LoginResponse> => {
-  return http.post('/auth/sign-in', data)
+  return HttpUtil.post('/auth/sign-in', data)
 }

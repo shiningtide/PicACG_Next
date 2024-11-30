@@ -1,6 +1,6 @@
 import { LogUtil } from '@pura/harmony-utils';
 import { profile } from '../api/profile';
-import { TOKEN_KEY, Unauthorized } from '../utils/consts';
+import { StorageKey, Unauthorized } from '../utils/consts';
 import router from '@ohos.router';
 import { NavItem } from '../utils/types';
 
@@ -11,7 +11,7 @@ struct Index {
   @StorageProp('bottomRectHeight') bottomRectHeight: number = 0
   @StorageProp('WindowHeight') WindowHeight: number = 0
   @StorageProp('WindowWidth') WindowWidth: number = 0
-  @StorageProp(TOKEN_KEY) token: string = ''
+  @StorageProp(StorageKey.TOKEN) token: string = ''
   @State currentTabIndex: number = 0
   @State animationDuration: number = 400
   pageStack: NavPathStack = new NavPathStack()
@@ -77,11 +77,11 @@ struct Index {
         .onChange((index) => {
           this.currentTabIndex = index
         })
-        .onAnimationStart((index,targetIndex) => {
+        .onAnimationStart((index, targetIndex) => {
           // this.currentTabIndex = targetIndex
           LogUtil.info(`onAnimationStart: ${index}-${this.currentTabIndex}`)
         })
-        .onAnimationEnd((index,targetIndex) => {
+        .onAnimationEnd((index, targetIndex) => {
           LogUtil.info(`onAnimationEnd: ${index}-${this.currentTabIndex}`)
         })
       }

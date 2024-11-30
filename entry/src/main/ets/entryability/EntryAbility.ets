@@ -3,7 +3,8 @@ import { hilog } from '@kit.PerformanceAnalysisKit';
 import { display, window } from '@kit.ArkUI';
 import { BusinessError } from '@ohos.base';
 import { AppUtil, LogUtil } from '@pura/harmony-utils';
-import { TOKEN_KEY } from '../utils/consts';
+import { StorageKey } from '../utils/consts';
+import { PreferenceManager } from '../utils/preference';
 
 export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
@@ -22,18 +23,21 @@ export default class EntryAbility extends UIAbility {
 
     windowStage.loadContent('pages/Index', (err) => {
       if (err.code) {
-        hilog.error(0x0000, 'PicaAbilityLog', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err) ?? '');
+        hilog.error(0x0000, 'PicaAbilityLog', 'Failed to load the content. Cause: %{public}s',
+          JSON.stringify(err) ?? '');
         return;
       }
       hilog.info(0x0000, 'PicaAbilityLog', 'Succeeded in loading the content.');
       // 初始化变量
-      PersistentStorage.persistProp(TOKEN_KEY, '');
+      PersistentStorage.persistProp(StorageKey.TOKEN, '');
+      PreferenceManager.init()
     });
 
     // 全屏
     windowStage.getMainWindow((err, windowClass) => {
       if (err.code) {
-        hilog.error(0x0000, 'PicaAbilityLog', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err) ?? '');
+        hilog.error(0x0000, 'PicaAbilityLog', 'Failed to load the content. Cause: %{public}s',
+          JSON.stringify(err) ?? '');
         return
       }
 

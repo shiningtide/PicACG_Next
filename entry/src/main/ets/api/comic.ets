@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from '@ohos/axios'
 import { RandomUtil } from '@pura/harmony-utils'
-import { http } from '../utils/http'
+import { HttpUtil } from '../utils/http'
 import { PicaPage } from '../utils/model'
 import { ComicDetailInfo, ComicEp, ComicSimpleInfo } from './models'
 
@@ -42,20 +42,20 @@ export const otherRecommend = (_id: string = RandomUtil.generateUUID32().replace
 
 /**本子妹推荐*/
 export const collections = (): Promise<CollectionResponse> => {
-  return http.get('/collections')
+  return HttpUtil.get('/collections')
 }
 
 /**相关推荐*/
 export const recommend = (_id: string): Promise<RecommendResponse> => {
-  return http.get(`/comics/${_id}/recommendation`)
+  return HttpUtil.get(`/comics/${_id}/recommendation`)
 }
 
 /**漫画详细信息*/
 export const detail = (_id: string): Promise<ComicDetailInfo> => {
-  return http.get(`/comics/${_id}`)
+  return HttpUtil.get(`/comics/${_id}`)
 }
 
 /**漫画目录*/
 export const eps = (_id: string, page: number = 1): Promise<PicaPage<ComicEp>> => {
-  return http.get(`/comics/${_id}/eps`, { page })
+  return HttpUtil.get(`/comics/${_id}/eps`, { page })
 }

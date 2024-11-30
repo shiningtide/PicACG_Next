@@ -1,5 +1,3 @@
-import { faceDetector } from '@kit.CoreVisionKit'
-
 export interface ComicSimpleInfo {
   _id: string // id
   title: string // 标题
