@@ -2,15 +2,11 @@ export class NavItem {
   /**
    * 选中图片
    */
-  selectImg: Resource
+  selectedImg: Resource
   /**
    * 未选样式
    */
-  unselected: Resource
-  /**
-   * 是否选择
-   */
-  isSelect: boolean = false
+  unselectedImg: Resource
   /**
    * 标题
    */
@@ -20,9 +16,9 @@ export class NavItem {
    */
   index: number
 
-  constructor(index = 0, unselected: Resource, selectImg: Resource, title = '') {
-    this.selectImg = selectImg
-    this.unselected = unselected
+  constructor(index: number, unselected: Resource, selectedImg: Resource, title = '') {
+    this.selectedImg = selectedImg
+    this.unselectedImg = unselected
     this.title = title
     this.index = index
   }

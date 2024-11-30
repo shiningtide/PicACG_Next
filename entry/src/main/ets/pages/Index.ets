@@ -13,9 +13,7 @@ struct Index {
   @StorageProp('WindowWidth') WindowWidth: number = 0
   @StorageProp(StorageKey.TOKEN) token: string = ''
   @State currentTabIndex: number = 0
-  @State animationDuration: number = 400
   pageStack: NavPathStack = new NavPathStack()
-  tabController: TabsController = new TabsController()
   nav: NavItem[] = [
     new NavItem(0, $r("app.media.ic_public_home"), $r('app.media.ic_public_home_filled'), '首页'),
     new NavItem(1, $r('app.media.ic_public_category'), $r('app.media.ic_public_category_filled'), '分类'),
@@ -25,7 +23,7 @@ struct Index {
   aboutToAppear(): void {
     // 判断当前是否登陆，token是否可用，否则跳转登陆页
     if (this.token) {
-      profile().then(res => {
+      profile().then(() => {
         LogUtil.info('token: 正常');
       }).catch((err: Error) => {
         if (`${Unauthorized}` === err.message) {
@@ -46,88 +44,46 @@ struct Index {
 
   build() {
     Navigation(this.pageStack) {
-      Column() {
-        Tabs({
-          index: this.currentTabIndex,
-          barPosition: BarPosition.End,
-          controller: this.tabController
-        }) {
-          ForEach(this.nav, (item: NavItem) => {
-            TabContent() {
-              Column() {
-                if (item.index === 0) {
-                  Text(item.title).width('100%').height('100%').backgroundColor('#00CB87')
-                } else if (item.index === 1) {
-                  Text(item.title).width('100%').height('100%').backgroundColor('#007DFF')
-                } else if (item.index === 2) {
-                  Text(item.title).width('100%').height('100%').backgroundColor('#FFBF00')
-                }
-              }
-            }
-            .tabBar(
-              this.TabBuilder(item.index, item.title, item.selectImg, item.unselected)
-            )
-          })
-        }
-        .vertical(false)
-        .barMode(BarMode.Fixed)
-        .divider({ strokeWidth: 1 })
-        .scrollable(false)
-        .animationDuration(this.animationDuration)
-        .onChange((index) => {
-          this.currentTabIndex = index
-        })
-        .onAnimationStart((index, targetIndex) => {
-          // this.currentTabIndex = targetIndex
-          LogUtil.info(`onAnimationStart: ${index}-${this.currentTabIndex}`)
-        })
-        .onAnimationEnd((index, targetIndex) => {
-          LogUtil.info(`onAnimationEnd: ${index}-${this.currentTabIndex}`)
-        })
-      }
-      .height('100%')
-      .width('100%')
-      .padding({ bottom: this.bottomRectHeight })
+      Column()
+        .width('100%')
+        .height('100%')
+        .backgroundColor(Color.Pink)
     }
     .backButtonIcon($r('app.media.ic_public_arrow_left'))
-    .hideToolBar(true)
+    .margin({ bottom: this.bottomRectHeight })
+    .toolbarConfiguration(this.tab(), { backgroundBlurStyle: BlurStyle.Thin })
   }
 
   @Builder
-  TabBuilder(index: number, name: string, selected: Resource, unselected: Resource) {
-    Column() {
-      Flex({
-        direction: FlexDirection.Column,
-        alignItems: ItemAlign.Center,
-        justifyContent: FlexAlign.Center
-      }) {
-        if (this.currentTabIndex === index) {
-          Image(selected)
-            .height(25)
-            .draggable(false)
-            .fillColor($r('app.color.common_button_background_weight'))
-            .transition(TransitionEffect.OPACITY.animation({ duration: this.animationDuration }))
+  tab() {
+    Row() {
+      ForEach(this.nav, (item: NavItem) => {
+        Button({ type: ButtonType.Normal, buttonStyle: ButtonStyleMode.TEXTUAL }) {
+          Column() {
+            Image(this.currentTabIndex === item.index ? item.selectedImg : item.unselectedImg)
+              .width(24)
+              .height(24)
+              .fillColor(this.currentTabIndex === item.index ? $r('app.color.common_button_background_light') :
+              Color.Gray)
 
-          Text(name)
-            .fontSize(11)
-            .margin(5)
-            .fontColor($r('app.color.common_button_background_weight'))
-            .transition(TransitionEffect.OPACITY.animation({ duration: this.animationDuration }))
-        } else {
-          Image(unselected).height(25)
-            .draggable(false)
-            .fillColor($r('app.color.common_button_background_light'))
-            .transition(TransitionEffect.OPACITY.animation({ duration: this.animationDuration }))
-
-          Text(name)
-            .fontSize(11)
-            .margin(5)
-            .fontColor($r('app.color.common_button_background_light'))
-            .transition(TransitionEffect.OPACITY.animation({ duration: this.animationDuration }))
+            Text(item.title)
+              .fontSize(10)
+              .fontColor(this.currentTabIndex === item.index ? $r('app.color.common_button_background_light') :
+              Color.Gray)
+          }
         }
-      }
+        .width('33%')
+        .borderRadius(5)
+        .stateEffect(false)
+        .clickEffect({ level: ClickEffectLevel.LIGHT, scale: 0.75 })
+        .onClick(() => {
+          this.currentTabIndex = item.index
+        })
+      })
     }
-    .width('100%')
-    .height("100%")
+    .padding({
+      left: 10,
+      right: 10,
+    })
   }
 }
