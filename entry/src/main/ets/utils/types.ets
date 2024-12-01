@@ -15,11 +15,13 @@ export class NavItem {
    * Index
    */
   index: number
+  builder: CustomBuilder
 
-  constructor(index: number, unselected: Resource, selectedImg: Resource, title = '') {
+  constructor(index: number, unselected: Resource, selectedImg: Resource, title: string, builder: CustomBuilder) {
     this.selectedImg = selectedImg
     this.unselectedImg = unselected
     this.title = title
     this.index = index
+    this.builder = builder
   }
 }

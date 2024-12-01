@@ -5,7 +5,8 @@ export function ComicContentBuilder(name: string, param: Object) {
 
 @Component
 export default struct ComicContent {
-  @Consume('NavPathStack') pageStack: NavPathStack;
+  @StorageProp('topRectHeight') topRectHeight: number = 0
+  @Consume('pageStack') pageStack: NavPathStack
 
   build() {
     NavDestination() {
@@ -14,10 +15,15 @@ export default struct ComicContent {
           .width('100%')
           .height('100%')
       }
+      .width('100%')
+      .height('100%')
+      .padding({ top: this.topRectHeight })
+      .backgroundColor(Color.Pink)
     }
     .mode(NavDestinationMode.STANDARD)
+    .hideTitleBar(true)
     .onReady((context: NavDestinationContext) => {
-      this.pageStack = context.pathStack;
+      this.pageStack = context.pathStack
     })
   }
 }

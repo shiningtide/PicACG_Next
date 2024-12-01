@@ -1,26 +1,23 @@
-import ComicCard from './ComicCard'
+import ComicCard, { ComicCardInterface } from './ComicCard'
 
 @Component
 export default struct ComicCardScroll {
-  @Prop comicIds: string[]
-  @Prop images: string[]
-  @Prop titles: string[]
+  @Prop comics: ComicCardInterface[]
 
   build() {
     Column() {
-      List({ space: 16 }) {
-        ForEach(this.comicIds, (item: string, index: number) => {
+      List({ space: 10 }) {
+        ForEach(this.comics, (comic: ComicCardInterface, index: number) => {
           ListItem() {
-            ComicCard({
-              comicId: item,
-              image: `${this.images[index]}`,
-              name: `${this.titles[index]})`
-            })
+            ComicCard({ comic: comic })
           }
+          .transition(TransitionEffect.OPACITY)
         })
-      }.listDirection(Axis.Horizontal)
+      }
       .width('100%')
       .height(220)
+      .scrollBar(BarState.Off)
+      .listDirection(Axis.Horizontal)
     }
   }
 }

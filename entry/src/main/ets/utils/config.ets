@@ -1,3 +1,5 @@
+import { SearchType } from '../pages/view/ComicList'
+
 const Host = 'picaapi.picacomic.com'
 const NewChatUrl = 'https://live-server.bidobido.xyz/'
 const SecretKey = '~d}$Q7$eIni=V)9\\RK/P.RM4;9[7|@/CA}b~OW!3?EV`:<>M7pddUBL5n|0/*Cn'
@@ -15,6 +17,13 @@ enum Api {
   Proxy = 'https://api.go2778.com/',
 }
 
+enum ImageApi {
+  Proxy = 'https://storage.diwodiwo.xyz/static/',
+  TriageOne = 'https://s3.picacomic.com/static/',
+  TriageTwo = 'https://s2.picacomic.com/static/',
+  TriageThree = 'https://storage1.picacomic.com/static/',
+}
+
 enum ImageQuality {
   Original = 'original',
   High = 'high',
@@ -27,6 +36,40 @@ enum AppChannel {
   Two = '2',
   Three = '3'
 }
+
+interface LocalCategory {
+  title: string
+  img: ResourceStr
+  router: string
+  param?: ESObject
+}
+
+const LocalCategories: LocalCategory[] = [
+  {
+    'title': '排行榜',
+    'img': $r('app.media.cat_leaderboard'),
+    router: 'Rank'
+  },
+  {
+    'title': '嗶咔留言板',
+    'img': $r('app.media.cat_forum'),
+    // 'link': '/pcomments/?cid=5822a6e3ad7ede654696e482&ishide=999',
+    router: 'Comments'
+  },
+  {
+    'title': '最近更新',
+    'img': $r('app.media.cat_latest'),
+    router: 'ComicList',
+    param: { type: SearchType.Category }
+  },
+  {
+    'title': '隨機本子',
+    'img': $r('app.media.cat_random'),
+    router: 'ComicList',
+    param: { type: SearchType.Random }
+  }
+]
+const CategoryFilter: string[] = ['援助嗶咔', '嗶咔小禮物', '小電影', '小里番', '嗶咔畫廊', '嗶咔商店', '嗶咔運動']
 
 export {
   Host,
@@ -42,5 +85,9 @@ export {
   Agent,
   Platform,
   Api,
+  ImageApi,
   ImageQuality,
+  LocalCategories,
+  CategoryFilter,
+  LocalCategory
 }

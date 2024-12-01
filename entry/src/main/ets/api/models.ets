@@ -4,7 +4,7 @@ export interface ComicSimpleInfo {
   thumb: Thumb //封面信息
   author: string // 作者
   categories: string[] // 分类
-  finished: string // 是否完结
+  finished: boolean // 是否完结
   epsCount: number // 章节的页码，一般为1（要超过40章才有翻页）
   pagesCount: number // 总页数
   totalViews: number // 观看人数
@@ -37,9 +37,9 @@ export interface ComicEp {
 }
 
 export interface Thumb {
-  originalName: string; // 文件名
-  path: string; // 文件路径
-  fileServer: string; // 文件服务
+  originalName?: string // 文件名
+  path: ResourceStr // 文件路径
+  fileServer: string // 文件服务
 }
 
 export interface Creator {
@@ -76,4 +76,21 @@ export interface Comment {
   likesCount: number
   commentsCount: number
   isLiked: boolean
+}
+
+export interface Category {
+  _id: string
+  title: string
+  description?: string
+  thumb: Thumb
+  link?: string
+  isWeb?: boolean
+  active?: boolean
+}
+
+export enum SortType {
+  Newest = 'dd',
+  Oldest = 'da',
+  Likest = 'ld',
+  Favorite = 'vd'
 }

@@ -1,10 +1,10 @@
-import { Api } from '../../utils/config';
-import { PreferenceItem, PreferenceManager, PreferenceStorageKey } from '../../utils/preference';
+import { Api } from '../../utils/config'
+import { PreferenceItem, PreferenceManager, PreferenceStorageKey } from '../../utils/preference'
 
 @CustomDialog
 export default struct ApiSelectionDialog {
-  @StorageProp(PreferenceStorageKey.Api) api: Api = Api.Origin
-  private controller: CustomDialogController; // 定义controller
+  @StorageProp(PreferenceStorageKey.API) api: Api = Api.Origin
+  private controller: CustomDialogController // 定义controller
 
   build() {
     Column() {
@@ -32,12 +32,12 @@ export default struct ApiSelectionDialog {
       .width('100%')
 
       Row() {
-        Button("完成", { buttonStyle: ButtonStyleMode.TEXTUAL })
-          .height("100%")
+        Button('完成', { buttonStyle: ButtonStyleMode.TEXTUAL })
+          .height('100%')
           .layoutWeight(1)
           .clickEffect({ level: ClickEffectLevel.LIGHT })
           .onClick(() => {
-            this.controller.close(); // 关闭弹窗
+            this.controller.close() // 关闭弹窗
           })
       }
       .height(45)

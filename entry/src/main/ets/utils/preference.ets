@@ -1,5 +1,5 @@
-import { Api, AppChannel, ImageQuality } from './config';
-import { HttpUtil } from './http';
+import { Api, AppChannel, ImageApi, ImageQuality } from './config'
+import { HttpUtil } from './http'
 
 export interface PreferenceItem {
   name: string
@@ -9,7 +9,8 @@ export interface PreferenceItem {
 
 export class PreferenceStorageKey {
   static readonly APP_CHANNEL: string = 'channel'
-  static readonly Api: string = 'api'
+  static readonly API: string = 'api'
+  static readonly IMAGE_API: string = 'image'
   static readonly IMAGE_QUALITY: string = 'quality'
   static readonly PRIVACY_MODE: string = 'privacy'
 }
@@ -30,11 +31,18 @@ export class PreferenceManager {
     { name: '线路二', value: AppChannel.Two, key: 'Two' },
     { name: '线路三', value: AppChannel.Three, key: 'Three' },
   ]
+  static readonly ImageApiItem: PreferenceItem[] = [
+    { name: '代理', value: ImageApi.Proxy, key: 'Proxy' },
+    { name: '分流一', value: ImageApi.TriageOne, key: 'TriageOne' },
+    { name: '分流二', value: ImageApi.TriageTwo, key: 'TriageTwo' },
+    { name: '分流三', value: ImageApi.TriageThree, key: 'TriageThree' },
+  ]
 
   static init() {
     // Api地址
-    PersistentStorage.persistProp<Api>(PreferenceStorageKey.Api, Api.Origin);
-    HttpUtil.init();
+    PersistentStorage.persistProp<Api>(PreferenceStorageKey.API, Api.Proxy)
+    PersistentStorage.persistProp<ImageApi>(PreferenceStorageKey.IMAGE_API, ImageApi.Proxy)
+    HttpUtil.init()
     // 画质
     PersistentStorage.persistProp<ImageQuality>(PreferenceStorageKey.IMAGE_QUALITY, ImageQuality.Original)
     // 分流
@@ -44,8 +52,12 @@ export class PreferenceManager {
   }
 
   static setApi(api: Api) {
-    AppStorage.setOrCreate<Api>(PreferenceStorageKey.Api, api)
-    HttpUtil.init();
+    AppStorage.setOrCreate<Api>(PreferenceStorageKey.API, api)
+    HttpUtil.init()
+  }
+
+  static setImageApi(api: ImageApi) {
+    AppStorage.setOrCreate<ImageApi>(PreferenceStorageKey.IMAGE_API, api)
   }
 
   static setQuality(quality: ImageQuality) {

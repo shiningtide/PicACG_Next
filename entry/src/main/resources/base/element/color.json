@@ -11,6 +11,10 @@
     {
       "name": "common_button_background_weight",
       "value": "#CB5D7C"
+    },
+    {
+      "name": "custom_pink",
+      "value": "#DB547C"
     }
   ]
 }

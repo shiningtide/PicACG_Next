@@ -1,8 +1,8 @@
-import { DialogUtil, LogUtil } from '@pura/harmony-utils';
-import { UserLogin } from '../api/auth';
-import { StorageKey, Timeout } from '../utils/consts';
-import router from '@ohos.router';
-import ApiSelectionDialog from './dialog/ApiSelectionDialog';
+import { DialogUtil, LogUtil } from '@pura/harmony-utils'
+import { UserLogin } from '../api/auth'
+import { StorageKey, Timeout } from '../utils/consts'
+import router from '@ohos.router'
+import ApiSelectionDialog from './dialog/ApiSelectionDialog'
 
 @Entry
 @Component
@@ -18,7 +18,7 @@ struct Login {
     cancel: () => {
       LogUtil.info('cancel')
     }
-  });
+  })
 
   build() {
     Column() {
@@ -121,7 +121,6 @@ struct Login {
         .margin({ bottom: 10 })
         .clickEffect({ level: ClickEffectLevel.LIGHT })
         .onClick(() => {
-          LogUtil.info('设置')
           this.dialog.open()
         })
       }

@@ -1,6 +1,6 @@
-import { HttpUtil } from '../utils/http';
-import { PicaPage } from '../utils/model';
-import { ComicSimpleInfo, Comment, User } from './models';
+import { HttpUtil } from '../utils/http'
+import { PicaPage } from '../utils/model'
+import { ComicSimpleInfo, Comment, User } from './models'
 
 export interface ProfileResponse {
   user: User

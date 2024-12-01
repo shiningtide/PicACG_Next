@@ -1,3 +1,5 @@
+import { ComicCardInterface } from '../component/ComicCard'
+
 @Builder
 export function ComicInfoBuilder(name: string, param: Object) {
   ComicInfo()
@@ -5,19 +7,30 @@ export function ComicInfoBuilder(name: string, param: Object) {
 
 @Component
 export default struct ComicInfo {
-  @Consume('NavPathStack') pageStack: NavPathStack;
+  @StorageProp('topRectHeight') topRectHeight: number = 0
+  @Consume('pageStack') pageStack: NavPathStack
+  @State comic: ComicCardInterface | undefined = undefined
+
+  aboutToAppear(): void {
+    this.comic = this.pageStack.getParamByIndex(0) as ComicCardInterface
+  }
 
   build() {
     NavDestination() {
       Column() {
-        Text('漫画信息页')
+        Text(this.comic?.title)
           .width('100%')
           .height('100%')
       }
+      .width('100%')
+      .height('100%')
+      .padding({ top: this.topRectHeight })
+      .backgroundColor(Color.Pink)
     }
     .mode(NavDestinationMode.STANDARD)
+    .hideTitleBar(true)
     .onReady((context: NavDestinationContext) => {
-      this.pageStack = context.pathStack;
+      this.pageStack = context.pathStack
     })
   }
 }

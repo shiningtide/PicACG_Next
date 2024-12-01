@@ -1,26 +1,55 @@
+import { LogUtil } from '@pura/harmony-utils'
+import { PreferenceStorageKey } from '../../utils/preference'
+import { ImageKnifeComponent } from '@ohos/imageknife'
+
 @Component
 export default struct ComicCard {
-  @Prop comicId: string
-  @Prop image: string
-  @Prop name: string
+  @StorageProp(PreferenceStorageKey.PRIVACY_MODE) privacyMode: boolean = false
+  @Consume('pageStack') pageStack: NavPathStack;
+  @Prop comic: ComicCardInterface
 
   build() {
     Column() {
-      Image(this.image)
+      ImageKnifeComponent({
+        imageKnifeOption: {
+          loadSrc: this.comic.image,
+          placeholderSrc: $r("app.media.loading"),
+          border: { radius: 6 },
+        }
+      })
         .height(160)
-        .borderRadius(6)
+        .foregroundBlurStyle(this.privacyMode ? BlurStyle.Thin : BlurStyle.NONE)
 
-      Text(this.name)
+      Text(this.comic.title)
         .textAlign(TextAlign.Center)
         .margin({ top: 6 })
-        .textOverflow({ overflow: TextOverflow.Ellipsis })
+        .textOverflow({ overflow: TextOverflow.MARQUEE })
         .maxLines(1)
-        .fontColor('#db547c')
+        .fontColor($r('app.color.custom_pink'))
         .fontWeight(500)
         .copyOption(CopyOptions.LocalDevice)
     }
     .width(150)
     .height(200)
     .padding(8)
+    .borderRadius(10)
+    .borderWidth(1)
+    .borderColor('#ffdfdfdf')
+    .shadow({
+      radius: 10,
+      color: '#ffdfdfdf',
+      offsetX: 15,
+      offsetY: 15
+    })
+    .onClick(() => {
+      LogUtil.info(`点击了本子：${this.comic.id} - ${this.comic.title}`)
+      this.pageStack.pushPath({ name: 'ComicInfo', param: this.comic })
+    })
   }
+}
+
+export interface ComicCardInterface {
+  id: string
+  image: string
+  title: string
 }

@@ -1,0 +1,96 @@
+import { ImageKnifeComponent, LogUtil } from '@ohos/imageknife'
+import { categories } from '../../api/comic'
+import { Category } from '../../api/models'
+import { CategoryFilter, LocalCategories, LocalCategory } from '../../utils/config'
+import { PreferenceStorageKey } from '../../utils/preference'
+import { SearchType } from './ComicList'
+
+@Component
+export default struct Categories {
+  @StorageProp(PreferenceStorageKey.PRIVACY_MODE) privacyMode: boolean = false
+  @StorageProp(PreferenceStorageKey.IMAGE_API) imageApi: string = ''
+  @Consume('pageStack') pageStack: NavPathStack;
+  @State remoteCategories: Category[] = []
+  @State localCategories: LocalCategory[] = LocalCategories
+
+  aboutToAppear(): void {
+    categories().then(res => {
+      this.remoteCategories = res.categories.filter((item) =>!CategoryFilter.includes(item.title))
+    }).catch((err: Error) => {
+      LogUtil.error(`错误: ${err.message}`)
+      LogUtil.error(err.stack)
+    })
+  }
+
+  build() {
+    Column() {
+      List({ space: 20, initialIndex: 0 }) {
+        // 本地分类
+        ForEach(this.localCategories, (item: LocalCategory) => {
+          ListItem({ style: ListItemStyle.CARD }) {
+            this.CategoryCard(item.img, item.title, item.router, item.param)
+          }
+          .width(115)
+          .height(145)
+          .border({ width: 1, color: '#ffdfdfdf' })
+          .shadow({
+            radius: 10,
+            color: '#ffdfdfdf',
+            offsetX: 10,
+            offsetY: 10
+          })
+        })
+        // 远程分类
+        ForEach(this.remoteCategories, (item: Category) => {
+          ListItem({ style: ListItemStyle.CARD }) {
+            this.CategoryCard(`${this.imageApi}${item.thumb.path}`, item.title, 'ComicList',
+              { type: SearchType.Category, key: item.title })
+          }
+          .width(115)
+          .height(145)
+          .border({ width: 1, color: '#ffdfdfdf' })
+          .shadow({
+            radius: 10,
+            color: '#ffdfdfdf',
+            offsetX: 10,
+            offsetY: 10
+          })
+        })
+      }
+      .height('100%')
+      .width('100%')
+      .lanes(3)
+      .scrollBar(BarState.Off)
+    }
+    .height('100%')
+    .width('100%')
+    .padding(10)
+  }
+
+  @Builder
+  CategoryCard(img: ResourceStr, title: string, router?: string, param?: ESObject) {
+    Column() {
+      ImageKnifeComponent({
+        imageKnifeOption: {
+          loadSrc: img,
+          placeholderSrc: $r("app.media.loading"),
+          border: { radius: 6 },
+        }
+      })
+        .height(115)
+        .foregroundBlurStyle(this.privacyMode ? BlurStyle.Thin : BlurStyle.NONE)
+
+      Text(title)
+        .textAlign(TextAlign.Center)
+        .maxLines(1)
+        .fontColor($r('app.color.custom_pink'))
+        .fontWeight(500)
+    }
+    .onClick(() => {
+      this.pageStack.pushPath({
+        name: router,
+        param
+      })
+    })
+  }
+}

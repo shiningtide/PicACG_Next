@@ -9,6 +9,11 @@
       "name": "ComicContent",
       "pageSourceFile": "src/main/ets/pages/view/ComicContent.ets",
       "buildFunction": "ComicContentBuilder"
+    },
+    {
+      "name": "ComicList",
+      "pageSourceFile": "src/main/ets/pages/view/ComicList.ets",
+      "buildFunction": "ComicListBuilder"
     }
   ]
 }
