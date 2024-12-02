@@ -15,6 +15,10 @@
     {
       "name": "custom_pink",
       "value": "#DB547C"
+    },
+    {
+      "name": "custom_gray",
+      "value": "#DFDFDF"
     }
   ]
 }

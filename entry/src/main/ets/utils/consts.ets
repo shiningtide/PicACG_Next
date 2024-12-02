@@ -2,6 +2,8 @@ type RequestMethod = 'GET' | 'POST'
 
 class StorageKey {
   static readonly TOKEN: string = 'authorization'
+  static readonly CATEGORY: string = 'category'
+  static readonly KEYWORDS: string = 'keywords'
 }
 
 const Ok = 200

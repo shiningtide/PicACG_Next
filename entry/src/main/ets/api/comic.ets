@@ -95,12 +95,14 @@ export const keywords = (): Promise<KeywordResponse> => {
 }
 
 /**漫画查询分页列表*/
-export const search = (keyword: string, page: number = 1, s: SortType = SortType.Newest): Promise<ComicResponse> => {
-  return HttpUtil.request('POST', '/comics', {
-    params: { page, s },
-    data: {
-      keyword,
-      sort: s
-    }
-  })
-}
+export const search =
+  (keyword: string, page: number = 1, s: SortType = SortType.Newest, categories: string[]): Promise<ComicResponse> => {
+    return HttpUtil.request('POST', '/comics', {
+      params: { page, s },
+      data: {
+        categories,
+        keyword,
+        sort: s
+      }
+    })
+  }

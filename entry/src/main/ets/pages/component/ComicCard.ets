@@ -34,10 +34,10 @@ export default struct ComicCard {
     .padding(8)
     .borderRadius(10)
     .borderWidth(1)
-    .borderColor('#ffdfdfdf')
+    .borderColor($r('app.color.custom_gray'))
     .shadow({
       radius: 10,
-      color: '#ffdfdfdf',
+      color: $r('app.color.custom_gray'),
       offsetX: 15,
       offsetY: 15
     })

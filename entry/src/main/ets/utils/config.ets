@@ -18,10 +18,10 @@ enum Api {
 }
 
 enum ImageApi {
-  Proxy = 'https://storage.diwodiwo.xyz/static/',
   TriageOne = 'https://s3.picacomic.com/static/',
   TriageTwo = 'https://s2.picacomic.com/static/',
   TriageThree = 'https://storage1.picacomic.com/static/',
+  Proxy = 'https://storage.diwodiwo.xyz/static/',
 }
 
 enum ImageQuality {

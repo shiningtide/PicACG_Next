@@ -2,6 +2,7 @@ import { ImageKnifeComponent, LogUtil } from '@ohos/imageknife'
 import { categories } from '../../api/comic'
 import { Category } from '../../api/models'
 import { CategoryFilter, LocalCategories, LocalCategory } from '../../utils/config'
+import { StorageKey } from '../../utils/consts'
 import { PreferenceStorageKey } from '../../utils/preference'
 import { SearchType } from './ComicList'
 
@@ -9,6 +10,7 @@ import { SearchType } from './ComicList'
 export default struct Categories {
   @StorageProp(PreferenceStorageKey.PRIVACY_MODE) privacyMode: boolean = false
   @StorageProp(PreferenceStorageKey.IMAGE_API) imageApi: string = ''
+  @StorageLink(StorageKey.CATEGORY) category: string[] = []
   @Consume('pageStack') pageStack: NavPathStack;
   @State remoteCategories: Category[] = []
   @State localCategories: LocalCategory[] = LocalCategories
@@ -16,6 +18,13 @@ export default struct Categories {
   aboutToAppear(): void {
     categories().then(res => {
       this.remoteCategories = res.categories.filter((item) =>!CategoryFilter.includes(item.title))
+      const cate: string[] = []
+      this.remoteCategories.forEach(item => {
+        if (item._id) {
+          cate.push(item.title)
+        }
+      })
+      this.category = cate
     }).catch((err: Error) => {
       LogUtil.error(`错误: ${err.message}`)
       LogUtil.error(err.stack)
@@ -32,10 +41,10 @@ export default struct Categories {
           }
           .width(115)
           .height(145)
-          .border({ width: 1, color: '#ffdfdfdf' })
+          .border({ width: 1, color: $r('app.color.custom_gray') })
           .shadow({
             radius: 10,
-            color: '#ffdfdfdf',
+            color: $r('app.color.custom_gray'),
             offsetX: 10,
             offsetY: 10
           })
@@ -48,10 +57,10 @@ export default struct Categories {
           }
           .width(115)
           .height(145)
-          .border({ width: 1, color: '#ffdfdfdf' })
+          .border({ width: 1, color: $r('app.color.custom_gray') })
           .shadow({
             radius: 10,
-            color: '#ffdfdfdf',
+            color: $r('app.color.custom_gray'),
             offsetX: 10,
             offsetY: 10
           })
