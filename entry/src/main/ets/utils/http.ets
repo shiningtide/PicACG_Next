@@ -154,6 +154,7 @@ export class HttpUtil {
           }
           if (error.response.data.code === Unauthorized) {
             LogUtil.error(`接口[${error.response.config.url}]请求失败：Unauthorized`)
+            AppStorage.setOrCreate<string>(StorageKey.TOKEN, '')
             router.replaceUrl({ url: 'pages/Login' })
             return Promise.reject(new Error(`${Unauthorized}`))
           }

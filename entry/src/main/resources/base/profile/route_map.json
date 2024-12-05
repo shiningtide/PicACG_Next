@@ -1,11 +1,6 @@
 {
   "routerMap": [
     {
-      "name": "Settings",
-      "pageSourceFile": "src/main/ets/pages/view/Settings.ets",
-      "buildFunction": "SettingsBuilder"
-    },
-    {
       "name": "ComicInfo",
       "pageSourceFile": "src/main/ets/pages/view/ComicInfo.ets",
       "buildFunction": "ComicInfoBuilder"

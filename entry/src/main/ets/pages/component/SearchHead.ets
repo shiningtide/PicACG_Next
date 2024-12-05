@@ -1,6 +1,6 @@
 import { keywords } from '../../api/comic';
 import { StorageKey } from '../../utils/consts';
-import { LengthUnit } from '@kit.ArkUI';
+import { LengthUnit, router } from '@kit.ArkUI';
 import { RandomUtil } from '@pura/harmony-utils';
 
 @Component
@@ -70,7 +70,7 @@ export default struct SearchHead {
         .buttonStyle(ButtonStyleMode.TEXTUAL)
         .clickEffect({ level: ClickEffectLevel.LIGHT, scale: 0.8 })
         .onClick(() => {
-          this.pageStack.pushPath({ name: 'Settings' })
+          router.pushUrl({ url: 'pages/Settings' })
         })
       }
       .height(30)
