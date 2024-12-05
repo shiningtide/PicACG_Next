@@ -1,8 +1,8 @@
 import { DialogUtil, LogUtil } from '@pura/harmony-utils'
 import { UserLogin } from '../api/auth'
-import { StorageKey, Timeout } from '../utils/consts'
+import { StorageKey, Timeout } from '../common/Consts'
 import router from '@ohos.router'
-import { PreferenceStorageKey } from '../utils/preference'
+import { PreferenceStorageKey } from '../utils/Preference'
 
 @Entry
 @Component

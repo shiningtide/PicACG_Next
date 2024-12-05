@@ -1,5 +1,5 @@
-import { HttpUtil } from '../utils/http'
-import { PicaPage } from '../utils/model'
+import { HttpUtil } from '../utils/Http'
+import { PicaPage } from '../common/Model'
 import { ComicSimpleInfo, Comment, User } from './models'
 
 export interface ProfileResponse {

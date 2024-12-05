@@ -1,4 +1,4 @@
-import { HttpUtil } from '../utils/http'
+import { HttpUtil } from '../utils/Http'
 
 interface LoginRequest {
   email: string

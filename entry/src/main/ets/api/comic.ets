@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from '@ohos/axios'
 import { MD5, RandomUtil } from '@pura/harmony-utils'
-import { HttpUtil } from '../utils/http'
-import { PicaPage } from '../utils/model'
+import { HttpUtil } from '../utils/Http'
+import { PicaPage } from '../common/Model'
 import { Category, ComicDetailInfo, ComicEp, ComicSimpleInfo, SortType } from './models'
 
 export interface CollectionResponse {

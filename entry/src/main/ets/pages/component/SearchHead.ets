@@ -1,5 +1,5 @@
 import { keywords } from '../../api/comic';
-import { StorageKey } from '../../utils/consts';
+import { StorageKey } from '../../common/Consts';
 import { LengthUnit, router } from '@kit.ArkUI';
 import { RandomUtil } from '@pura/harmony-utils';
 

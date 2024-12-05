@@ -1,5 +1,5 @@
-import { Api, AppChannel, ImageApi, ImageQuality } from './config'
-import { HttpUtil } from './http'
+import { Api, AppChannel, ImageApi, ImageQuality } from '../common/Config'
+import { HttpUtil } from './Http'
 
 export interface PreferenceItem {
   name: string

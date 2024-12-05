@@ -6,8 +6,8 @@ import axios, {
   CreateAxiosDefaults,
   InternalAxiosRequestConfig
 } from '@ohos/axios'
-import { PicaResponse } from './model'
-import { Ok, RequestMethod, StorageKey, Timeout, Unauthorized } from './consts'
+import { PicaResponse } from '../common/Model'
+import { Ok, RequestMethod, StorageKey, Timeout, Unauthorized } from '../common/Consts'
 import { HashMap } from '@kit.ArkTS'
 import {
   Accept,
@@ -21,10 +21,10 @@ import {
   Host,
   Platform,
   SecretKey
-} from './config'
+} from '../common/Config'
 import { LogUtil, RandomUtil } from '@pura/harmony-utils'
 import CryptoJS from '@ohos/crypto-js'
-import { PreferenceStorageKey } from './preference'
+import { PreferenceStorageKey } from './Preference'
 import { router } from '@kit.ArkUI'
 
 export class HttpUtil {

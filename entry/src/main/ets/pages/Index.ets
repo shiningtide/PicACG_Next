@@ -1,4 +1,4 @@
-import { NavItem } from '../utils/types'
+import { NavItem } from '../common/Types'
 import Home from './view/Home'
 import Main from './view/Main'
 import Categories from './view/Categories'

@@ -1,9 +1,9 @@
 import { ImageKnifeComponent, LogUtil } from '@ohos/imageknife'
 import { categories } from '../../api/comic'
 import { Category } from '../../api/models'
-import { CategoryFilter, LocalCategories, LocalCategory } from '../../utils/config'
-import { StorageKey } from '../../utils/consts'
-import { PreferenceStorageKey } from '../../utils/preference'
+import { CategoryFilter, LocalCategories, LocalCategory } from '../../common/Config'
+import { StorageKey } from '../../common/Consts'
+import { PreferenceStorageKey } from '../../utils/Preference'
 import { SearchType } from './ComicList'
 
 @Component

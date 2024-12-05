@@ -2,7 +2,7 @@ import { collections, otherRecommend } from '../../api/comic'
 import { ComicCardInterface } from '../component/ComicCard'
 import { LogUtil } from '@pura/harmony-utils'
 import ComicCardScroll from '../component/ComicCardScroll'
-import { PreferenceStorageKey } from '../../utils/preference'
+import { PreferenceStorageKey } from '../../utils/Preference'
 
 @Component
 export default struct Main {

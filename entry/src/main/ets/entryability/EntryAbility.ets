@@ -3,8 +3,8 @@ import { hilog } from '@kit.PerformanceAnalysisKit'
 import { display, window } from '@kit.ArkUI'
 import { BusinessError } from '@ohos.base'
 import { AppUtil, LogUtil } from '@pura/harmony-utils'
-import { StorageKey } from '../utils/consts'
-import { PreferenceManager } from '../utils/preference'
+import { StorageKey } from '../common/Consts'
+import { PreferenceManager } from '../utils/Preference'
 import { ImageKnife } from '@ohos/imageknife'
 
 export default class EntryAbility extends UIAbility {

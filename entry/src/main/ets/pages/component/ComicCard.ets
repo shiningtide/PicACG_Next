@@ -1,5 +1,5 @@
 import { LogUtil } from '@pura/harmony-utils'
-import { PreferenceStorageKey } from '../../utils/preference'
+import { PreferenceStorageKey } from '../../utils/Preference'
 import { ImageKnifeComponent } from '@ohos/imageknife'
 
 @Component

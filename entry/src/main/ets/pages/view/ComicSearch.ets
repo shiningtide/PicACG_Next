@@ -1,4 +1,4 @@
-import { StorageKey } from '../../utils/consts';
+import { StorageKey } from '../../common/Consts';
 
 @Builder
 export function ComicSearchBuilder(name: string, param: Object) {
