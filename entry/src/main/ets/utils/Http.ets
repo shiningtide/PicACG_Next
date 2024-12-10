@@ -105,7 +105,7 @@ export class HttpUtil {
       path = path.substring(1)
     }
     const raw = (path + timestamp + nonce + method + ApiKey).toLowerCase()
-    LogUtil.debug(`SignRaw:   ${raw}`)
+    LogUtil.debug(`SignRaw: ${raw}`)
     const signature = CryptoJS.HmacSHA256(raw, SecretKey).toString(CryptoJS.enc.Hex)
     LogUtil.info(`Signature: ${signature}`)
     return signature
@@ -116,7 +116,11 @@ export class HttpUtil {
     HttpUtil.instance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
       // 对请求数据做点什么
       config.headers[StorageKey.TOKEN] = AppStorage.get(StorageKey.TOKEN)
-      HttpUtil.buildHeader(config.url, config.method).forEach((val: string, key: string) => {
+      let signUrl = config.url
+      if (config.params !== undefined && config.method === 'get' || config.method === 'GET') {
+        signUrl += '?' + Object.keys(config.params).map(key => key + '=' + config.params[key]).join('&')
+      }
+      HttpUtil.buildHeader(signUrl, config.method).forEach((val: string, key: string) => {
         config.headers[key] = val
       })
       LogUtil.debug(`Host: ${AppStorage.get(PreferenceStorageKey.API)}`)

@@ -1,4 +1,4 @@
-import { SearchType } from '../pages/view/ComicList'
+import { SearchType } from '../pages/view/ComicListView'
 
 const Host = 'picaapi.picacomic.com'
 const NewChatUrl = 'https://live-server.bidobido.xyz/'

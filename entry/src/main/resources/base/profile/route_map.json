@@ -11,9 +11,9 @@
       "buildFunction": "ComicContentBuilder"
     },
     {
-      "name": "ComicList",
-      "pageSourceFile": "src/main/ets/pages/view/ComicList.ets",
-      "buildFunction": "ComicListBuilder"
+      "name": "ComicListView",
+      "pageSourceFile": "src/main/ets/pages/view/ComicListView.ets",
+      "buildFunction": "ComicListViewBuilder"
     },
     {
       "name": "ComicSearch",

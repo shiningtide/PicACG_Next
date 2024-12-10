@@ -4,7 +4,7 @@ import { Category } from '../../api/models'
 import { CategoryFilter, LocalCategories, LocalCategory } from '../../common/Config'
 import { StorageKey } from '../../common/Consts'
 import { PreferenceStorageKey } from '../../utils/Preference'
-import { SearchType } from './ComicList'
+import { SearchType } from './ComicListView'
 
 @Component
 export default struct Categories {
@@ -79,15 +79,18 @@ export default struct Categories {
   @Builder
   CategoryCard(img: ResourceStr, title: string, router?: string, param?: ESObject) {
     Column() {
-      ImageKnifeComponent({
-        imageKnifeOption: {
-          loadSrc: img,
-          placeholderSrc: $r("app.media.loading"),
-          border: { radius: 6 },
-        }
-      })
-        .height(115)
-        .foregroundBlurStyle(this.privacyMode ? BlurStyle.Thin : BlurStyle.NONE)
+      Column() {
+        ImageKnifeComponent({
+          imageKnifeOption: {
+            loadSrc: img,
+            placeholderSrc: $r("app.media.loading"),
+            border: { radius: 6 },
+          }
+        })
+          .height(115)
+      }
+      .borderRadius(6)
+      .foregroundBlurStyle(this.privacyMode ? BlurStyle.Thin : BlurStyle.NONE)
 
       Text(title)
         .textAlign(TextAlign.Center)

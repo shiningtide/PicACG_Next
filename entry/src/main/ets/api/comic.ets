@@ -3,6 +3,7 @@ import { MD5, RandomUtil } from '@pura/harmony-utils'
 import { HttpUtil } from '../utils/Http'
 import { PicaPage } from '../common/Model'
 import { Category, ComicDetailInfo, ComicEp, ComicSimpleInfo, SortType } from './models'
+import { CommentResponse } from './profile'
 
 export interface CollectionResponse {
   collections: Collection[]
@@ -81,7 +82,7 @@ export const categories = (): Promise<CategoryResponse> => {
 }
 
 /**漫画分页列表*/
-export const comics = (c?: string, page: number = 1, s: SortType = SortType.Newest): Promise<ComicResponse> => {
+export const comics = (page: number = 1, s: SortType = SortType.Newest, c?: string): Promise<ComicResponse> => {
   if (c) {
     return HttpUtil.get('/comics', { page, c, s })
   } else {
@@ -95,14 +96,19 @@ export const keywords = (): Promise<KeywordResponse> => {
 }
 
 /**漫画查询分页列表*/
-export const search =
-  (keyword: string, page: number = 1, s: SortType = SortType.Newest, categories: string[]): Promise<ComicResponse> => {
-    return HttpUtil.request('POST', '/comics', {
-      params: { page, s },
-      data: {
-        categories,
-        keyword,
-        sort: s
-      }
-    })
-  }
+export const search = (page: number = 1, s: SortType = SortType.Newest, keyword: string, categories: string[]):
+  Promise<ComicResponse> => {
+  return HttpUtil.request('POST', '/comics', {
+    params: { page, s },
+    data: {
+      categories,
+      keyword,
+      sort: s
+    }
+  })
+}
+
+/**漫画评论*/
+export const comments = (comicId: string, page: number = 1): Promise<CommentResponse> => {
+  return HttpUtil.get(`/comics/${comicId}/comments`, { page })
+}

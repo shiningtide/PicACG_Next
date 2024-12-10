@@ -1,7 +1,7 @@
 {
   "app": {
     "bundleName": "com.picacomic.next",
-    "patchVersionCode": 2000616,
+    "patchVersionCode": 2000732,
     "versionCode": 1000000
   },
   "module": {

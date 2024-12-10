@@ -66,16 +66,17 @@ export interface User extends Creator {
 }
 
 export interface Comment {
-  _id: string
   id: string
   content: string
-  _comic: ComicSimpleInfo
   hide: boolean
   created_at: string
   totalComments: number
   likesCount: number
   commentsCount: number
   isLiked: boolean
+  _id: string
+  _comic: ComicSimpleInfo
+  _user: Creator
 }
 
 export interface Category {
@@ -86,6 +87,11 @@ export interface Category {
   link?: string
   isWeb?: boolean
   active?: boolean
+}
+
+export interface PunchIn {
+  punchInLastDay: string
+  status: string
 }
 
 export enum SortType {

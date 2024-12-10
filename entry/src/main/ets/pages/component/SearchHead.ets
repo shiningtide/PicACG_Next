@@ -58,7 +58,7 @@ export default struct SearchHead {
 
       Row() {
         Button() {
-          Image($r('app.media.ic_public_settings'))
+          Image($r('app.media.ic_public_settings_filled'))
             .width(24)
             .height(24)
             .fillColor($r('app.color.common_button_background_weight'))

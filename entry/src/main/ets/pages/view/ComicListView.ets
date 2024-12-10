@@ -1,10 +1,10 @@
 @Builder
-export function ComicListBuilder(name: string, param: Object) {
-  ComicList()
+export function ComicListViewBuilder(name: string, param: Object) {
+  ComicListView()
 }
 
 @Component
-export default struct ComicList {
+export default struct ComicListView {
   @StorageProp('topRectHeight') topRectHeight: number = 0
   @Consume('pageStack') pageStack: NavPathStack
   @State searchParam: ComicListOptions | undefined = undefined

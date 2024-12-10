@@ -10,15 +10,18 @@ export default struct ComicCard {
 
   build() {
     Column() {
-      ImageKnifeComponent({
-        imageKnifeOption: {
-          loadSrc: this.comic.image,
-          placeholderSrc: $r("app.media.loading"),
-          border: { radius: 6 },
-        }
-      })
-        .height(160)
-        .foregroundBlurStyle(this.privacyMode ? BlurStyle.Thin : BlurStyle.NONE)
+      Column() {
+        ImageKnifeComponent({
+          imageKnifeOption: {
+            loadSrc: this.comic.image,
+            placeholderSrc: $r("app.media.loading"),
+            border: { radius: 6 },
+          }
+        })
+          .height(160)
+      }
+      .borderRadius(6)
+      .foregroundBlurStyle(this.privacyMode ? BlurStyle.Thin : BlurStyle.NONE)
 
       Text(this.comic.title)
         .textAlign(TextAlign.Center)

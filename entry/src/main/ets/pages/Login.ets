@@ -71,7 +71,7 @@ struct Login {
 
         Button({ type: ButtonType.Circle, buttonStyle: ButtonStyleMode.TEXTUAL }) {
           Row() {
-            Image($r('app.media.ic_public_settings'))
+            Image($r('app.media.ic_public_settings_filled'))
               .width(30)
               .height(30)
               .fillColor($r('app.color.common_button_background_light'))

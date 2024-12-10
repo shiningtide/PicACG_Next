@@ -32,6 +32,7 @@ export default class EntryAbility extends UIAbility {
       hilog.info(0x0000, 'PicaAbilityLog', 'Succeeded in loading the content.')
       // 初始化变量
       PersistentStorage.persistProp(StorageKey.TOKEN, '')
+      PersistentStorage.persistProp(StorageKey.HISTORY, [])
       PreferenceManager.init()
     })
 
