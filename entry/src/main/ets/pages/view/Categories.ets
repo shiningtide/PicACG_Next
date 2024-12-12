@@ -1,4 +1,5 @@
-import { ImageKnifeComponent, LogUtil } from '@ohos/imageknife'
+import { ImageKnifeComponent } from '@ohos/imageknife'
+import { LogUtil } from '@pura/harmony-utils'
 import { categories } from '../../api/comic'
 import { Category } from '../../api/models'
 import { CategoryFilter, LocalCategories, LocalCategory } from '../../common/Config'
@@ -17,7 +18,9 @@ export default struct Categories {
 
   aboutToAppear(): void {
     categories().then(res => {
-      this.remoteCategories = res.categories.filter((item) =>!CategoryFilter.includes(item.title))
+      animateTo({ duration: 300 }, () => {
+        this.remoteCategories = res.categories.filter((item) =>!CategoryFilter.includes(item.title))
+      })
       const cate: string[] = []
       this.remoteCategories.forEach(item => {
         if (item._id) {
@@ -52,11 +55,12 @@ export default struct Categories {
         // 远程分类
         ForEach(this.remoteCategories, (item: Category) => {
           ListItem({ style: ListItemStyle.CARD }) {
-            this.CategoryCard(`${this.imageApi}${item.thumb.path}`, item.title, 'ComicList',
+            this.CategoryCard(`${this.imageApi}${item.thumb.path}`, item.title, 'ComicListView',
               { type: SearchType.Category, key: item.title })
           }
           .width(115)
           .height(145)
+          .transition(TransitionEffect.move(TransitionEdge.BOTTOM))
           .border({ width: 1, color: $r('app.color.custom_gray') })
           .shadow({
             radius: 10,
@@ -83,7 +87,7 @@ export default struct Categories {
         ImageKnifeComponent({
           imageKnifeOption: {
             loadSrc: img,
-            placeholderSrc: $r("app.media.loading"),
+            placeholderSrc: $r('app.media.loading'),
             border: { radius: 6 },
           }
         })
@@ -99,6 +103,7 @@ export default struct Categories {
         .fontWeight(500)
     }
     .onClick(() => {
+      LogUtil.info('跳转路由：', router)
       this.pageStack.pushPath({
         name: router,
         param

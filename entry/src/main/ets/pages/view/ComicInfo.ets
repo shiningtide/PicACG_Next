@@ -1,3 +1,4 @@
+import { LogUtil } from '@pura/harmony-utils'
 import { ComicCardInterface } from '../component/ComicCard'
 
 @Builder
@@ -12,7 +13,8 @@ export default struct ComicInfo {
   @State comic: ComicCardInterface | undefined = undefined
 
   aboutToAppear(): void {
-    this.comic = this.pageStack.getParamByIndex(0) as ComicCardInterface
+    this.comic = this.pageStack.getParamByName('ComicInfo')[0] as ComicCardInterface
+    LogUtil.info('本子详情页：', this.comic.id, ' - ', this.comic.title)
   }
 
   build() {

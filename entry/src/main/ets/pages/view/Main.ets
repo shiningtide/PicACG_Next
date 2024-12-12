@@ -22,11 +22,13 @@ export default struct Main {
 
   loadRecommend() {
     otherRecommend().then(res => {
-      res.forEach((comic) => {
-        this.recommend.push({
-          id: comic.id,
-          title: comic.title,
-          image: comic.pic
+      animateTo({ duration: 300 }, () => {
+        res.forEach((comic) => {
+          this.recommend.push({
+            id: comic.id,
+            title: comic.title,
+            image: comic.pic
+          })
         })
       })
       LogUtil.info(`随机推荐: ${res.length}`)
@@ -40,11 +42,13 @@ export default struct Main {
     collections().then(res => {
       res.collections.forEach((collection) => {
         LogUtil.info(`${collection.title}: ${collection.comics.length}`)
-        collection.comics.forEach((comic) => {
-          this.collections.push({
-            id: comic._id,
-            title: `${comic.title}（${comic.pagesCount}P）${comic.finished ? '（完）' : ''}`,
-            image: `${this.imageApi}${comic.thumb.path}`
+        animateTo({ duration: 300 }, () => {
+          collection.comics.forEach((comic) => {
+            this.collections.push({
+              id: comic._id,
+              title: `${comic.title}（${comic.pagesCount}P）${comic.finished ? '（完）' : ''}`,
+              image: `${this.imageApi}${comic.thumb.path}`
+            })
           })
         })
       })

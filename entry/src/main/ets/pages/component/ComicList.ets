@@ -15,29 +15,33 @@ export default struct ComicList {
   @State isEnd: boolean = false;
   @State maxPage: number = 1
   @State page: number = 1
-  @Prop sort: SortType = SortType.Newest
-  @Prop param1: string = ''
-  @Prop param2: string[] = []
-  @Prop func: ComicListFunction
+  @Prop @Watch('attrChange') attr: ComicListAttribute
+  @Prop canSwipe: boolean = true
   private scroll: Scroller = new Scroller()
 
+  attrChange() {
+    this.isRefreshing = true
+  }
+
   loadComics() {
-    if (this.func.type === 'history') {
+    if (this.attr.type === 'history') {
       LogUtil.debug('加载浏览历史')
       setTimeout(() => {
         animateTo({ duration: 500 }, () => {
           this.comics = HistoryUtil.get()
           this.isRefreshing = false
+          this.scroll.scrollEdge(Edge.Top)
         })
       }, 500)
-    } else if (this.func.type === 'remote') {
+    } else if (this.attr.type === 'remote') {
       LogUtil.debug('加载远程数据')
-      if (this.func.api !== undefined) {
-        this.func.api(this.page, this.sort, this.param1, this.param2)
+      if (this.attr.api !== undefined) {
+        this.attr.api(this.page, this.attr.sort, this.attr.param1, this.attr.param2)
           .then(res => {
             animateTo({ duration: 500 }, () => {
               if (this.page === 1) {
                 this.comics = res.comics.docs
+                this.scroll.scrollEdge(Edge.Top)
               } else {
                 this.comics.push(...res.comics.docs)
               }
@@ -64,6 +68,7 @@ export default struct ComicList {
             ListItem() {
               ComicListItem({
                 image: `${this.imageApi}${comic.thumb.path}`,
+                _id: comic._id,
                 title: comic.title,
                 pagesCount: comic.pagesCount,
                 finished: comic.finished,
@@ -77,8 +82,11 @@ export default struct ComicList {
             .layoutWeight(1)
             .height(undefined)
             .borderRadius(30)
-            .transition(TransitionEffect.OPACITY)
-            .swipeAction({
+            .transition(TransitionEffect.asymmetric(
+              TransitionEffect.move(TransitionEdge.BOTTOM).animation({ duration: 300 }),
+              TransitionEffect.move(TransitionEdge.START).animation({ duration: 300 })
+            ))
+            .swipeAction(this.canSwipe ? {
               end: {
                 builder: () => {
                   this.itemEnd(comic)
@@ -89,7 +97,7 @@ export default struct ComicList {
                 },
                 actionAreaDistance: 56,
               }
-            })
+            } : undefined)
           }, (item: ComicSimpleInfo) => {
             return item._id
           })
@@ -98,7 +106,7 @@ export default struct ComicList {
             ListItem() {
               Row() {
                 Text('没有更多了')
-              }.width("100%")
+              }.width('100%')
               .height(64)
               .justifyContent(FlexAlign.Center)
             }
@@ -108,7 +116,7 @@ export default struct ComicList {
             ListItem() {
               Row() {
                 LoadingProgress().height(32).width(48)
-              }.width("100%")
+              }.width('100%')
               .height(64)
               .justifyContent(FlexAlign.Center)
             }
@@ -186,7 +194,10 @@ export default struct ComicList {
   }
 }
 
-interface ComicListFunction {
+export interface ComicListAttribute {
   type: 'history' | 'remote',
-  api?: (page: number, s: SortType, p3: string, p4: string[]) => Promise<ComicResponse>
+  api?: (page?: number, s?: SortType, p3?: string, p4?: string[]) => Promise<ComicResponse>
+  sort?: SortType
+  param1?: string
+  param2?: string[]
 }

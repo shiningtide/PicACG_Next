@@ -36,6 +36,10 @@ export interface ComicResponse {
   comics: PicaPage<ComicSimpleInfo>
 }
 
+export interface RandomResponse {
+  comic: ComicSimpleInfo[]
+}
+
 export interface KeywordResponse {
   keywords: string[]
 }
@@ -83,22 +87,13 @@ export const categories = (): Promise<CategoryResponse> => {
 
 /**漫画分页列表*/
 export const comics = (page: number = 1, s: SortType = SortType.Newest, c?: string): Promise<ComicResponse> => {
-  if (c) {
-    return HttpUtil.get('/comics', { page, c, s })
-  } else {
-    return HttpUtil.get('/comics', { page, s })
-  }
+  return HttpUtil.get('/comics', { page, c, s })
 }
 
-/**大家都在搜*/
-export const keywords = (): Promise<KeywordResponse> => {
-  return HttpUtil.get('/keywords')
-}
-
-/**漫画查询分页列表*/
-export const search = (page: number = 1, s: SortType = SortType.Newest, keyword: string, categories: string[]):
+/**关键字查询分页列表*/
+export const search = (page: number = 1, s: SortType = SortType.Newest, keyword?: string, categories?: string[]):
   Promise<ComicResponse> => {
-  return HttpUtil.request('POST', '/comics', {
+  return HttpUtil.request('POST', '/advanced-search', {
     params: { page, s },
     data: {
       categories,
@@ -108,7 +103,18 @@ export const search = (page: number = 1, s: SortType = SortType.Newest, keyword:
   })
 }
 
+/**随机本子*/
+export const random = (): Promise<RandomResponse> => {
+  return HttpUtil.get('/comic/random')
+}
+
+/**大家都在搜*/
+export const keywords = (): Promise<KeywordResponse> => {
+  return HttpUtil.get('/keywords')
+}
+
 /**漫画评论*/
 export const comments = (comicId: string, page: number = 1): Promise<CommentResponse> => {
   return HttpUtil.get(`/comics/${comicId}/comments`, { page })
 }
+

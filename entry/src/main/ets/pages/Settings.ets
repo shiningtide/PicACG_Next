@@ -54,7 +54,7 @@ struct Settings {
         titleBarColor: Color.White,
         statusBarColor: Color.White,
         centerType: TitleType.TEXT,
-        centerText: "设置",
+        centerText: '设置',
         centerTextColor: $r('app.color.common_button_background_light'),
         leftBackType: BackType.ROUTER,
         leftBackFillColor: $r('app.color.common_button_background_light'),

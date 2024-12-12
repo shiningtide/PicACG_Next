@@ -11,7 +11,7 @@ export default struct ComicCardScroll {
           ListItem() {
             ComicCard({ comic: comic })
           }
-          .transition(TransitionEffect.OPACITY)
+          .transition(TransitionEffect.move(TransitionEdge.END))
         })
       }
       .width('100%')

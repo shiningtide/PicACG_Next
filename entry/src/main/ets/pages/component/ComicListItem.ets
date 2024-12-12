@@ -1,10 +1,14 @@
-import { ImageKnifeComponent, ImageKnifeOption } from '@ohos/imageknife'
-import { PreferenceStorageKey } from '../../utils/Preference'
+import { ImageKnifeComponent, ImageKnifeOption } from '@ohos/imageknife';
+import { LogUtil } from '@pura/harmony-utils';
+import { PreferenceStorageKey } from '../../utils/Preference';
+import { ComicCardInterface } from './ComicCard';
 
 @Component
 export default struct ComicListItem {
   @StorageProp(PreferenceStorageKey.PRIVACY_MODE) privacyMode: boolean = false
+  @Consume('pageStack') pageStack: NavPathStack;
   @Prop image: string
+  @Prop _id: string
   @Prop title: string = '无标题'
   @Prop pagesCount: number = 0
   @Prop finished: boolean = false
@@ -20,7 +24,7 @@ export default struct ComicListItem {
         ImageKnifeComponent({
           imageKnifeOption: new ImageKnifeOption({
             loadSrc: this.image,
-            placeholderSrc: $r("app.media.loading"),
+            placeholderSrc: $r('app.media.loading'),
             border: { radius: 10 }
           })
         })
@@ -98,5 +102,15 @@ export default struct ComicListItem {
     .width('100%')
     .height(180)
     .layoutWeight(1)
+    .onClick(() => {
+      LogUtil.info(`点击了本子：${this._id} - ${this.title}`)
+      let comic: ComicCardInterface = {
+        id: this._id,
+        image: this.image,
+        title: this.title
+      }
+      // this.pageStack.pushPath({ name: 'ComicInfo', param: comic })
+      this.pageStack.pushPathByName('ComicInfo', comic)
+    })
   }
 }

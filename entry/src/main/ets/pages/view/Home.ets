@@ -13,7 +13,7 @@ export default struct Home {
   @StorageProp(PreferenceStorageKey.IMAGE_API) imageApi: string = ''
   @State currentIndex: number = 0
   @State animationDuration: number = 300
-  @State tabs: string[] = ["浏览历史", "我的收藏", "我的评论"]
+  @State tabs: string[] = ['浏览历史', '我的收藏', '我的评论']
   @State index: number = 0
   @State profile: User | undefined = undefined
   swiperController = new SwiperController()
@@ -118,7 +118,7 @@ export default struct Home {
       SlidingTabsV1({
         index: this.index,
         tabs: this.tabs,
-        barMode: "scroll",
+        barMode: 'scroll',
         controller: this.tabController4,
         tabStyle: {
           fontColor: Color.Gray,
@@ -131,12 +131,12 @@ export default struct Home {
       })
       Swiper(this.tabController4.swiperController) {
         Stack() {
-          ComicList({ func: { type: 'history' } })
+          ComicList({ attr: { type: 'history' } })
         }
         .width('100%').height('100%')
 
         Stack() {
-          ComicList({ func: { type: 'remote', api: favourite } })
+          ComicList({ attr: { type: 'remote', api: favourite } })
         }
         .width('100%').height('100%')
 

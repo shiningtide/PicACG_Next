@@ -8,7 +8,7 @@ import axios, {
 } from '@ohos/axios'
 import { PicaResponse } from '../common/Model'
 import { Ok, RequestMethod, StorageKey, Timeout, Unauthorized } from '../common/Consts'
-import { HashMap } from '@kit.ArkTS'
+import { HashMap, util } from '@kit.ArkTS'
 import {
   Accept,
   Agent,
@@ -22,7 +22,7 @@ import {
   Platform,
   SecretKey
 } from '../common/Config'
-import { LogUtil, RandomUtil } from '@pura/harmony-utils'
+import { DialogUtil, LogUtil } from '@pura/harmony-utils'
 import CryptoJS from '@ohos/crypto-js'
 import { PreferenceStorageKey } from './Preference'
 import { router } from '@kit.ArkUI'
@@ -77,7 +77,7 @@ export class HttpUtil {
 
   private static buildHeader(path: string = '', method: string = 'GET'): HashMap<String, String> {
     const timestamp = (new Date().getTime() / 1000).toFixed(0)
-    const nonce = RandomUtil.generateUUID32().toLowerCase().replace('-', '')
+    const nonce = util.generateRandomUUID(true).replaceAll('-', '')
 
     const header = new HashMap<String, String>()
     header.set('Content-Type', 'application/json; charset=UTF-8')
@@ -119,6 +119,8 @@ export class HttpUtil {
       let signUrl = config.url
       if (config.params !== undefined && config.method === 'get' || config.method === 'GET') {
         signUrl += '?' + Object.keys(config.params).map(key => key + '=' + config.params[key]).join('&')
+        config.url = signUrl
+        config.params = undefined
       }
       HttpUtil.buildHeader(signUrl, config.method).forEach((val: string, key: string) => {
         config.headers[key] = val
@@ -149,6 +151,10 @@ export class HttpUtil {
       // 对响应错误做点什么
       if (error.message.toLowerCase().includes(Timeout)) {
         LogUtil.error(`接口请求失败：连接超时`)
+        DialogUtil.showConfirmDialog({
+          title: '连接超时',
+          message: '请检查网络连通情况，或在设置中修改接口线路后重启应用'
+        })
         return Promise.reject(new Error(Timeout))
       } else {
         if (error.response) {

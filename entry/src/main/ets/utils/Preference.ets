@@ -4,7 +4,8 @@ import { HttpUtil } from './Http'
 export interface PreferenceItem {
   name: string
   value: string,
-  key: string
+  key: string,
+  icon?: ResourceStr
 }
 
 export class PreferenceStorageKey {

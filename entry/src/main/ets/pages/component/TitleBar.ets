@@ -77,7 +77,7 @@ export struct TitleBar {
   @StorageProp(TitleGlobalAttribute.STATUS_BAR_COLOR) globalStatusBarColor: ResourceColor = '#f5f5f5'; // 全局设置状态栏颜色
   @StorageProp(TitleGlobalAttribute.SHOW_BOTTOM_LINE) globalShowBottomLine: boolean = true; // 全局设置是否显示标题栏底部的分割线
   @StorageProp(TitleGlobalAttribute.BOTTOM_LINE_SIZE) globalBottomLineSize: Length = 1; // 全局设置标题栏底部的分割线的宽度
-  @StorageProp(TitleGlobalAttribute.BOTTOM_LINE_COLOR) globalBottomLineColor: ResourceColor = "#DDDDDD"; // 全局设置标题栏分割线颜色
+  @StorageProp(TitleGlobalAttribute.BOTTOM_LINE_COLOR) globalBottomLineColor: ResourceColor = '#DDDDDD'; // 全局设置标题栏分割线颜色
   @Prop isFullScreen: boolean =
     this.isFullScreen === undefined ? this.globalIsFullScreen : this.isFullScreen; // 是否是全面屏
   @Prop statusBarHeight: Length =
@@ -100,7 +100,7 @@ export struct TitleBar {
   @StorageProp(TitleGlobalAttribute.LEFT_TYPE) globalLeftType: string = TitleType.IMAGE; // 全局设置左侧视图类型
   @StorageProp(TitleGlobalAttribute.LEFT_LEFT_PADDING) globalLeftLeftPadding: Length = 15; // 全局设置左侧视图左内间距
   @StorageProp(TitleGlobalAttribute.LEFT_RIGHT_PADDING) globalLeftRightPadding: Length = 5; // 全局设置左侧视图右内间距
-  @StorageProp(TitleGlobalAttribute.LEFT_TEXT_COLOR) globalLeftTextColor: ResourceColor = "#000000"; // 全局设置左侧文字颜色
+  @StorageProp(TitleGlobalAttribute.LEFT_TEXT_COLOR) globalLeftTextColor: ResourceColor = '#000000'; // 全局设置左侧文字颜色
   @StorageProp(TitleGlobalAttribute.LEFT_TEXT_SIZE) globalLeftTextSize: Length = 16; // 全局设置左侧文字大小
   @StorageProp(TitleGlobalAttribute.LEFT_IMAGE_RESOURCE) globalLeftImageResource: ResourceStr | PixelMap =
     $r('app.media.ic_public_arrow_left'); // 全局设置左侧图标
@@ -131,7 +131,7 @@ export struct TitleBar {
   this.leftImagePadding; // 左侧图标padding值：图标尺寸16，内间距各5，保证点击范围
   @Prop leftBackType: string = BackType.ROUTER; // 返回方法
   @Prop leftBackFillColor: ResourceColor = ''
-  @Prop leftPopToName: string = ''; // NavPathStack.popToName("name") 方式的页面名称
+  @Prop leftPopToName: string = ''; // NavPathStack.popToName('name') 方式的页面名称
   @Prop leftPopToIndex: number = 0; // NavPathStack.popToIndex(1) 方式的索引
   @BuilderParam leftCustomView: () => void; // 左侧自定义View
   leftOnClick?: () => void; // 左侧点击事件
@@ -141,7 +141,7 @@ export struct TitleBar {
   @StorageProp(TitleGlobalAttribute.RIGHT_TYPE) globalRightType: string = TitleType.NONE; // 全局设置右侧视图类型
   @StorageProp(TitleGlobalAttribute.RIGHT_LEFT_PADDING) globalRightLeftPadding: Length = 5; // 全局设置右侧视图左内间距
   @StorageProp(TitleGlobalAttribute.RIGHT_RIGHT_PADDING) globalRightRightPadding: Length = 15; // 全局设置右侧视图右内间距
-  @StorageProp(TitleGlobalAttribute.RIGHT_TEXT_COLOR) globalRightTextColor: ResourceColor = "#000000"; // 全局设置右侧文字颜色
+  @StorageProp(TitleGlobalAttribute.RIGHT_TEXT_COLOR) globalRightTextColor: ResourceColor = '#000000'; // 全局设置右侧文字颜色
   @StorageProp(TitleGlobalAttribute.RIGHT_TEXT_SIZE) globalRightTextSize: Length = 16; // 全局设置右侧文字大小
   @StorageProp(TitleGlobalAttribute.RIGHT_IMAGE_RESOURCE) globalRightImageResource: ResourceStr | PixelMap =
     $r('app.media.ic_public_more'); // 全局设置右侧图标
@@ -182,7 +182,7 @@ export struct TitleBar {
   @StorageProp(TitleGlobalAttribute.CENTER_TYPE) globalCenterType: string = TitleType.TEXT; // 全局设置居中视图类型
   @StorageProp(TitleGlobalAttribute.CENTER_LEFT_PADDING) globalCenterLeftPadding: Length = 30; // 全局设置居中视图左内间距
   @StorageProp(TitleGlobalAttribute.CENTER_RIGHT_PADDING) globalCenterRightPadding: Length = 30; // 全局设置居中视图右内间距
-  @StorageProp(TitleGlobalAttribute.CENTER_TEXT_COLOR) globalCenterTextColor: ResourceColor = "#000000"; // 全局设置居中文字颜色
+  @StorageProp(TitleGlobalAttribute.CENTER_TEXT_COLOR) globalCenterTextColor: ResourceColor = '#000000'; // 全局设置居中文字颜色
   @StorageProp(TitleGlobalAttribute.CENTER_TEXT_SIZE) globalCenterTextSize: Length = 16; // 全局设置居中文字大小
   @StorageProp(TitleGlobalAttribute.CENTER_IMAGE_RESOURCE) globalCenterImageResource: ResourceStr | PixelMap =
     $r('app.media.ic_public_more'); // 全局设置右侧图标
@@ -251,7 +251,7 @@ export struct TitleBar {
   build() {
     Column() {
       Row()
-        .width("100%")
+        .width('100%')
         .height(this.statusBarHeight)
         .backgroundColor(this.statusBarColor)
         .visibility(this.isFullScreen ? Visibility.Visible : Visibility.None)
@@ -328,9 +328,9 @@ export struct TitleBar {
         })
         .justifyContent(FlexAlign.Center)
         .alignRules({
-          center: { anchor: "__container__", align: VerticalAlign.Center },
-          left: { anchor: "__container__", align: HorizontalAlign.Start },
-          right: { anchor: "__container__", align: HorizontalAlign.End }
+          center: { anchor: '__container__', align: VerticalAlign.Center },
+          left: { anchor: '__container__', align: HorizontalAlign.Start },
+          right: { anchor: '__container__', align: HorizontalAlign.End }
         })
         .height('100%')
         .width(this.centerWidth)
@@ -367,7 +367,7 @@ export struct TitleBar {
                 this.leftOnClick();
               } else { // 没有自定义点击事件，点击则默认返回
                 if (this.leftBackType === BackType.NONE) {
-                  console.log("左侧返回")
+                  console.log('左侧返回')
                 } else if (this.leftBackType === BackType.ROUTER) {
                   router.back()
                 }
@@ -389,8 +389,8 @@ export struct TitleBar {
           right: this.leftRightPadding
         })
         .alignRules({
-          center: { anchor: "__container__", align: VerticalAlign.Center },
-          left: { anchor: "__container__", align: HorizontalAlign.Start }
+          center: { anchor: '__container__', align: VerticalAlign.Center },
+          left: { anchor: '__container__', align: HorizontalAlign.Start }
         })
         .width(this.leftWidth)
         .height('100%')
@@ -455,14 +455,14 @@ export struct TitleBar {
         })
         .height('100%')
         .alignRules({
-          center: { anchor: "__container__", align: VerticalAlign.Center },
-          right: { anchor: "__container__", align: HorizontalAlign.End }
+          center: { anchor: '__container__', align: VerticalAlign.Center },
+          right: { anchor: '__container__', align: HorizontalAlign.End }
         })
         .width(this.rightWidth)
         .id('right')
 
       }
-      .width("100%")
+      .width('100%')
       .height(this.titleBarHeight)
       .backgroundColor(this.titleBarColor)
       .border({

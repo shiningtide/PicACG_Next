@@ -11,10 +11,14 @@ export default struct SearchHead {
   @Link @Watch('onRefreshKeyword') refreshKeyword: boolean
 
   aboutToAppear(): void {
-    keywords().then(res => {
-      this.keywords = res.keywords
+    if (this.keywords.length === 0) {
+      keywords().then(res => {
+        this.keywords = res.keywords
+        this.changeShowKey()
+      })
+    } else {
       this.changeShowKey()
-    })
+    }
   }
 
   onRefreshKeyword() {

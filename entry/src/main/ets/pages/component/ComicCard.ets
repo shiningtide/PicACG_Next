@@ -14,7 +14,7 @@ export default struct ComicCard {
         ImageKnifeComponent({
           imageKnifeOption: {
             loadSrc: this.comic.image,
-            placeholderSrc: $r("app.media.loading"),
+            placeholderSrc: $r('app.media.loading'),
             border: { radius: 6 },
           }
         })
@@ -46,7 +46,8 @@ export default struct ComicCard {
     })
     .onClick(() => {
       LogUtil.info(`点击了本子：${this.comic.id} - ${this.comic.title}`)
-      this.pageStack.pushPath({ name: 'ComicInfo', param: this.comic })
+      // this.pageStack.pushPath({ name: 'ComicInfo', param: this.comic })
+      this.pageStack.pushPathByName('ComicInfo', this.comic)
     })
   }
 }

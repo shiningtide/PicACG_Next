@@ -56,7 +56,10 @@ export default struct CommentList {
               })
             }
             .layoutWeight(1)
-            .transition(TransitionEffect.OPACITY)
+            .transition(TransitionEffect.asymmetric(
+              TransitionEffect.move(TransitionEdge.BOTTOM).animation({ duration: 300 }),
+              TransitionEffect.move(TransitionEdge.START).animation({ duration: 300 })
+            ))
           }, (item: Comment) => {
             return item._id
           })
@@ -65,7 +68,7 @@ export default struct CommentList {
             ListItem() {
               Row() {
                 Text('没有更多了')
-              }.width("100%")
+              }.width('100%')
               .height(64)
               .justifyContent(FlexAlign.Center)
             }
@@ -75,7 +78,7 @@ export default struct CommentList {
             ListItem() {
               Row() {
                 LoadingProgress().height(32).width(48)
-              }.width("100%")
+              }.width('100%')
               .height(64)
               .justifyContent(FlexAlign.Center)
             }
