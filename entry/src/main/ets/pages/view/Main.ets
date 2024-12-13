@@ -30,7 +30,6 @@ export default struct Main {
             title: comic.title,
             image: ReplaceImageApi(comic.pic)
           })
-          LogUtil.info(`随机推荐: ${ReplaceImageApi(comic.pic)}`)
         })
       })
       LogUtil.info(`随机推荐: ${res.length}`)

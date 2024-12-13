@@ -15,7 +15,7 @@ export interface Collection {
 }
 
 export interface RecommendResponse {
-  comics: ComicSimpleInfo[]
+  comics: ComicDetailInfo[]
 }
 
 export interface DetailResponse {
@@ -34,6 +34,10 @@ export interface CategoryResponse {
 
 export interface ComicResponse {
   comics: PicaPage<ComicDetailInfo>
+}
+
+export interface EpsResponse {
+  eps: PicaPage<ComicEp>
 }
 
 export interface RandomResponse {
@@ -66,17 +70,17 @@ export const collections = (): Promise<CollectionResponse> => {
 }
 
 /**相关推荐*/
-export const recommend = (_id: string): Promise<RecommendResponse> => {
+export const recommendation = (_id: string): Promise<RecommendResponse> => {
   return HttpUtil.get(`/comics/${_id}/recommendation`)
 }
 
 /**漫画详细信息*/
-export const detail = (_id: string): Promise<ComicDetailInfo> => {
+export const detail = (_id?: string): Promise<DetailResponse> => {
   return HttpUtil.get(`/comics/${_id}`)
 }
 
 /**漫画目录*/
-export const eps = (_id: string, page: number = 1): Promise<PicaPage<ComicEp>> => {
+export const eps = (_id: string, page: number = 1): Promise<EpsResponse> => {
   return HttpUtil.get(`/comics/${_id}/eps`, { page })
 }
 
@@ -85,10 +89,29 @@ export const categories = (): Promise<CategoryResponse> => {
   return HttpUtil.get('categories')
 }
 
-/**漫画分页列表*/
-export const comics = (page: number = 1, s: SortType = SortType.Newest, c?: string): Promise<ComicResponse> => {
-  return HttpUtil.get('/comics', { page, c, s })
-}
+/**
+ * 漫画分页列表（c和ca二选一，同时传入以c为优先）
+ * @param page 页码
+ * @param s 排序
+ * @param c 分类名称
+ * @param ca 上传者id
+ * */
+export const comics =
+  (page: number = 1, s: SortType = SortType.Newest, c?: string, ca?: string): Promise<ComicResponse> => {
+    if (c) {
+      return HttpUtil.get('/comics', {
+        page,
+        s,
+        c,
+      })
+    } else {
+      return HttpUtil.get('/comics', {
+        page,
+        s,
+        ca
+      })
+    }
+  }
 
 /**关键字查询分页列表*/
 export const search = (page: number = 1, s: SortType = SortType.Newest, keyword?: string, categories?: string[]):
@@ -114,7 +137,7 @@ export const keywords = (): Promise<KeywordResponse> => {
 }
 
 /**漫画评论*/
-export const comments = (comicId: string, page: number = 1): Promise<CommentResponse> => {
+export const comments = (page: number = 1, comicId: string): Promise<CommentResponse> => {
   return HttpUtil.get(`/comics/${comicId}/comments`, { page })
 }
 

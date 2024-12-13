@@ -165,7 +165,7 @@ export default struct ComicList {
         .onReachEnd(() => {
           if (this.isEnd && this.page < this.maxPage) {
             LogUtil.info('onReachEnd到底辣！！！要加载更多')
-            this.page += 1
+            this.page++
             animateTo({ duration: 500 }, () => {
               this.isLoading = true
               this.loadComics()
@@ -226,8 +226,8 @@ export default struct ComicList {
 
 export interface ComicListAttribute {
   type: 'history' | 'remote',
-  api?: (page?: number, s?: SortType, p3?: string, p4?: string[]) => Promise<ComicResponse>
+  api?: (page?: number, s?: SortType, p3?: string, p4?: string | string[]) => Promise<ComicResponse>
   sort?: SortType
   param1?: string
-  param2?: string[]
+  param2?: string | string[]
 }

@@ -1,34 +1,43 @@
 import { LogUtil } from '@pura/harmony-utils';
+import { comments } from '../../api/comic';
 import { Comment } from '../../api/models';
-import { myComments } from '../../api/profile';
-import { PreferenceStorageKey } from '../../utils/Preference';
+import { CommentResponse, myComments } from '../../api/profile';
 import CommentListItem from './CommentListItem';
 
 @Component
 export default struct CommentList {
-  @StorageProp(PreferenceStorageKey.IMAGE_API) imageApi: string = ''
   @State comments: Comment[] = []
+  @State topComments: Comment[] = []
   @State isRefreshing: boolean = true
   @State isLoading: boolean = false;
   @State isEnd: boolean = false;
   @State maxPage: number = 1
   @State page: number = 1
   @Prop avatar: string | undefined = undefined
+  @Prop comicId: string
   private scroll: Scroller = new Scroller()
 
   loadComments() {
-    myComments(this.page)
+    let api: (page: number, comicId?: string) => Promise<CommentResponse>
+    if (this.comicId) {
+      LogUtil.info('加载漫画评论', this.comicId)
+      api = comments as (page: number, comicId?: string) => Promise<CommentResponse>
+    } else {
+      LogUtil.info('加载我的评论')
+      api = myComments
+    }
+    api(this.page, this.comicId)
       .then(res => {
-        LogUtil.info('avatar: ', this.imageApi, this.avatar)
         animateTo({ duration: 500 }, () => {
           if (this.page === 1) {
             this.comments = res.comments.docs
+            this.topComments = res.topComments
           } else {
             this.comments.push(...res.comments.docs)
           }
+          this.page = res.comments.page
+          this.maxPage = res.comments.pages
         })
-        this.page = res.comments.page
-        this.maxPage = res.comments.pages
       })
       .finally(() => {
         animateTo({ duration: 500 }, () => {
@@ -52,7 +61,9 @@ export default struct CommentList {
                 createTime: comment.created_at,
                 comicTitle: comment._comic.title,
                 comicId: comment._comic._id,
-                avatar: `${this.imageApi}${this.avatar ? this.avatar : comment._user.avatar.path}`
+                avatar: `${this.avatar ? this.avatar : comment._user?.avatar?.path}`
+                // avatar: `${comment._user.avatar.path}`
+                // avatar: `${this.avatar}`
               })
             }
             .layoutWeight(1)
@@ -97,7 +108,7 @@ export default struct CommentList {
         .onReachEnd(() => {
           if (this.isEnd && this.page < this.maxPage) {
             LogUtil.info('onReachEnd到底辣！！！要加载更多')
-            this.page += 1
+            this.page++
             animateTo({ duration: 500 }, () => {
               this.isLoading = true
               this.loadComments()

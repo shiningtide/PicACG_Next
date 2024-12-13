@@ -38,7 +38,7 @@ export default struct ComicListView {
       // 关键字查询
       this.attr = {
         type: 'remote',
-        api: search,
+        api: search as (page?: number, s?: SortType, p3?: string, p4?: string | string[]) => Promise<ComicResponse>,
         sort: this.sort,
         param1: this.searchParam.key,
         param2: this.filterCategory
@@ -48,7 +48,7 @@ export default struct ComicListView {
       LogUtil.info('分类查询：', this.searchParam.key)
       this.attr = {
         type: 'remote',
-        api: comics,
+        api: comics as (page?: number, s?: SortType, p3?: string, p4?: string | string[]) => Promise<ComicResponse>,
         sort: this.sort,
         param1: this.searchParam.key ? encodeURI(this.searchParam.key) : '',
       }

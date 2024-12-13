@@ -58,7 +58,7 @@ struct Index {
           this.currentTabIndex = index
         })
         .onAppear(() => {
-          this.tabController.preloadItems([0, 1])
+          this.tabController.preloadItems([0, 1, 2])
             .then(() => {
               LogUtil.info('preloadItems success.')
             })

@@ -38,7 +38,7 @@ export default struct Home {
             // 头像
             ImageKnifeComponent({
               imageKnifeOption: {
-                loadSrc: this.imageApi + this.profile?.avatar.path,
+                loadSrc: this.imageApi + this.profile?.avatar?.path,
                 border: {
                   radius: 50,
                   width: 2,
@@ -141,7 +141,7 @@ export default struct Home {
         .width('100%').height('100%')
 
         Stack() {
-          CommentList({ avatar: `${this.profile?.avatar.path}` })
+          CommentList({ avatar: `${this.profile?.avatar?.path}` })
         }
         .width('100%').height('100%')
       }

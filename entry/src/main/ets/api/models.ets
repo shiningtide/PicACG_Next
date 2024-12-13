@@ -53,7 +53,7 @@ export interface Creator {
   level: number
   characters: string[]
   role: string
-  avatar: Thumb
+  avatar?: Thumb
 }
 
 export interface User extends Creator {
@@ -74,6 +74,7 @@ export interface Comment {
   likesCount: number
   commentsCount: number
   isLiked: boolean
+  isTop: boolean
   _id: string
   _comic: ComicSimpleInfo
   _user: Creator

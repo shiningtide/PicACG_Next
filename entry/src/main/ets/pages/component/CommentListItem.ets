@@ -1,9 +1,11 @@
 import { ImageKnifeComponent } from '@ohos/imageknife'
 import { DateUtil } from '@pura/harmony-utils'
+import { PreferenceStorageKey } from '../../utils/Preference'
 import { ComicCardInterface } from './ComicCard'
 
 @Component
 export default struct CommentListItem {
+  @StorageProp(PreferenceStorageKey.IMAGE_API) imageApi: string = ''
   @Consume('pageStack') pageStack: NavPathStack;
   @Prop _id: string
   @Prop content: string
@@ -21,7 +23,7 @@ export default struct CommentListItem {
       Column() {
         ImageKnifeComponent({
           imageKnifeOption: {
-            loadSrc: this.avatar,
+            loadSrc: this.imageApi + this.avatar,
             border: {
               radius: 50,
               width: 2,
