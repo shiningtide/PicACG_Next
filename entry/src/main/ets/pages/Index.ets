@@ -3,6 +3,8 @@ import Home from './view/Home'
 import Main from './view/Main'
 import Categories from './view/Categories'
 import SearchHead from './component/SearchHead'
+import { BusinessError } from '@ohos.base'
+import { LogUtil } from '@pura/harmony-utils'
 
 @Entry
 @Component
@@ -54,6 +56,15 @@ struct Index {
         .divider({ strokeWidth: 1 })
         .onChange((index) => {
           this.currentTabIndex = index
+        })
+        .onAppear(() => {
+          this.tabController.preloadItems([0, 1])
+            .then(() => {
+              LogUtil.info('preloadItems success.')
+            })
+            .catch((error: BusinessError) => {
+              LogUtil.error('preloadItems failed, error code: ' + error.code + ', error message: ' + error.message)
+            })
         })
       }
       .height('100%')

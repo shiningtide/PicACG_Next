@@ -117,7 +117,7 @@ export class HttpUtil {
       // 对请求数据做点什么
       config.headers[StorageKey.TOKEN] = AppStorage.get(StorageKey.TOKEN)
       let signUrl = config.url
-      if (config.params !== undefined && config.method === 'get' || config.method === 'GET') {
+      if (config.params !== undefined) {
         signUrl += '?' + Object.keys(config.params).map(key => key + '=' + config.params[key]).join('&')
         config.url = signUrl
         config.params = undefined

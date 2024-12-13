@@ -33,11 +33,11 @@ export interface CategoryResponse {
 }
 
 export interface ComicResponse {
-  comics: PicaPage<ComicSimpleInfo>
+  comics: PicaPage<ComicDetailInfo>
 }
 
 export interface RandomResponse {
-  comic: ComicSimpleInfo[]
+  comic: ComicDetailInfo[]
 }
 
 export interface KeywordResponse {
@@ -93,7 +93,7 @@ export const comics = (page: number = 1, s: SortType = SortType.Newest, c?: stri
 /**关键字查询分页列表*/
 export const search = (page: number = 1, s: SortType = SortType.Newest, keyword?: string, categories?: string[]):
   Promise<ComicResponse> => {
-  return HttpUtil.request('POST', '/advanced-search', {
+  return HttpUtil.request('POST', '/comics/advanced-search', {
     params: { page, s },
     data: {
       categories,

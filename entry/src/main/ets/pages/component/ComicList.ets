@@ -1,7 +1,8 @@
 import { LogUtil, ToastUtil } from '@pura/harmony-utils';
 import { ComicResponse } from '../../api/comic';
-import { ComicSimpleInfo, SortType } from '../../api/models';
+import { ComicDetailInfo, ComicSimpleInfo, SortType } from '../../api/models';
 import { favouriteAction } from '../../api/profile';
+import { StorageKey } from '../../common/Consts';
 import { HistoryUtil } from '../../utils/History';
 import { PreferenceStorageKey } from '../../utils/Preference';
 import ComicListItem from './ComicListItem';
@@ -9,7 +10,9 @@ import ComicListItem from './ComicListItem';
 @Component
 export default struct ComicList {
   @StorageProp(PreferenceStorageKey.IMAGE_API) imageApi: string = ''
-  @State comics: ComicSimpleInfo[] = []
+  @StorageProp(StorageKey.CATEGORY) category: string[] = []
+  @StorageLink(StorageKey.FILTER_CATEGORY) filterCategory: string[] = []
+  @State comics: ComicDetailInfo[] = []
   @State isRefreshing: boolean = true
   @State isLoading: boolean = false;
   @State isEnd: boolean = false;
@@ -17,6 +20,7 @@ export default struct ComicList {
   @State page: number = 1
   @Prop @Watch('attrChange') attr: ComicListAttribute
   @Prop canSwipe: boolean = true
+  @Prop showFilter: boolean = false
   private scroll: Scroller = new Scroller()
 
   attrChange() {
@@ -62,9 +66,34 @@ export default struct ComicList {
 
   build() {
     Column() {
+      if (this.showFilter) {
+        Scroll(new Scroller()) {
+          Row() {
+            ForEach(this.category, (cate: string, index: number) => {
+              Button(cate)
+                .height(30)
+                .stateEffect(false)
+                .margin({ left: index === 0 ? 0 : 5 })
+                .backgroundColor(
+                  this.filterCategory.indexOf(cate) >= 0 ? Color.Gray : $r('app.color.common_button_background_weight')
+                )
+                .onClick(() => {
+                  if (this.filterCategory.indexOf(cate) >= 0) {
+                    this.filterCategory = this.filterCategory.filter(c => c !== cate)
+                  } else {
+                    this.filterCategory.push(cate)
+                  }
+                })
+            })
+          }
+          .height(40)
+        }
+        .scrollable(ScrollDirection.Horizontal)
+        .scrollBar(BarState.Off)
+      }
       Refresh({ refreshing: $$this.isRefreshing }) {
         List({ space: 5, scroller: this.scroll }) {
-          ForEach(this.comics, (comic: ComicSimpleInfo) => {
+          ForEach(this.comics, (comic: ComicDetailInfo) => {
             ListItem() {
               ComicListItem({
                 image: `${this.imageApi}${comic.thumb.path}`,
@@ -74,9 +103,10 @@ export default struct ComicList {
                 finished: comic.finished,
                 author: comic.author,
                 categories: comic.categories,
-                likesCount: comic.totalLikes,
-                viewCount: comic.totalViews,
-                epsCount: comic.epsCount
+                likesCount: comic.totalLikes ? comic.totalLikes : comic.likesCount,
+                viewCount: comic.totalViews ? comic.totalViews : comic.viewsCount,
+                epsCount: comic.epsCount,
+                filter: this.showFilter
               })
             }
             .layoutWeight(1)

@@ -1,4 +1,5 @@
 import { router } from '@kit.ArkUI';
+import { LogUtil } from '@pura/harmony-utils';
 
 /**
  * 视图类型
@@ -367,7 +368,7 @@ export struct TitleBar {
                 this.leftOnClick();
               } else { // 没有自定义点击事件，点击则默认返回
                 if (this.leftBackType === BackType.NONE) {
-                  console.log('左侧返回')
+                  LogUtil.info('左侧返回')
                 } else if (this.leftBackType === BackType.ROUTER) {
                   router.back()
                 }

@@ -101,6 +101,7 @@ struct Settings {
       }
       .margin({ top: 15 })
       .borderRadius(10)
+      .enabled(!this.showSetting)
 
       Column() {
         Row() {

@@ -33,6 +33,8 @@ export default class EntryAbility extends UIAbility {
       // 初始化变量
       PersistentStorage.persistProp(StorageKey.TOKEN, '')
       PersistentStorage.persistProp(StorageKey.HISTORY, [])
+      PersistentStorage.persistProp(StorageKey.SEARCH_HISTORY, [])
+      PersistentStorage.persistProp(StorageKey.FILTER_CATEGORY, [])
       PreferenceManager.init()
     })
 

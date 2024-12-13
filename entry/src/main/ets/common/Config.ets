@@ -48,48 +48,31 @@ interface LocalCategory {
 
 const LocalCategories: LocalCategory[] = [
   {
-    'title': '排行榜',
-    'img': $r('app.media.cat_leaderboard'),
+    title: '排行榜',
+    img: $r('app.media.cat_leaderboard'),
     router: 'Rank'
   },
   {
-    'title': '嗶咔留言板',
-    'img': $r('app.media.cat_forum'),
+    title: '嗶咔留言板',
+    img: $r('app.media.cat_forum'),
     // 'link': '/pcomments/?cid=5822a6e3ad7ede654696e482&ishide=999',
     router: 'Comments'
   },
   {
-    'title': '最近更新',
-    'img': $r('app.media.cat_latest'),
+    title: '最近更新',
+    img: $r('app.media.cat_latest'),
     router: 'ComicList',
     param: { type: SearchType.Category }
   },
   {
-    'title': '隨機本子',
-    'img': $r('app.media.cat_random'),
+    title: '隨機本子',
+    img: $r('app.media.cat_random'),
     router: 'ComicList',
     param: { type: SearchType.Random }
   }
 ]
 
 const CategoryFilter: string[] = ['援助嗶咔', '嗶咔小禮物', '小電影', '小里番', '嗶咔畫廊', '嗶咔商店', '嗶咔運動']
-
-const FilterTags: string[] = ['偽娘', '耽美', '扶他', 'WEBTOON', '純愛', '重口', '生肉']
-
-const GetColorByTag = (tag: string): ResourceColor => {
-  if (tag === '偽娘' || tag === '耽美' || tag === '扶他') {
-    return '#5AC6FF';
-  } else if (tag === 'WEBTOON') {
-    return '#FA6600';
-  } else if (tag === '純愛') {
-    return '#FF5F69';
-  } else if (tag === '重口') {
-    return '#A77EEF';
-  } else if (tag === '生肉') {
-    return '#ABF597';
-  }
-  return ''
-}
 
 const SortItems: PreferenceItem[] = [
   {
@@ -137,7 +120,5 @@ export {
   LocalCategories,
   CategoryFilter,
   LocalCategory,
-  FilterTags,
-  GetColorByTag,
   SortItems
 }

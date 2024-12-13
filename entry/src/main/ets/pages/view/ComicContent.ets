@@ -23,7 +23,7 @@ export default struct ComicContent {
     .mode(NavDestinationMode.STANDARD)
     .hideTitleBar(true)
     .onReady((context: NavDestinationContext) => {
-      this.pageStack = context.pathStack
+      // this.pageStack = context.pathStack
     })
   }
 }

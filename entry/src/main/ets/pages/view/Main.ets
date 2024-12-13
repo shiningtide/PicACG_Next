@@ -3,6 +3,7 @@ import { ComicCardInterface } from '../component/ComicCard'
 import { LogUtil } from '@pura/harmony-utils'
 import ComicCardScroll from '../component/ComicCardScroll'
 import { PreferenceStorageKey } from '../../utils/Preference'
+import { ReplaceImageApi } from '../../common/Consts'
 
 @Component
 export default struct Main {
@@ -27,8 +28,9 @@ export default struct Main {
           this.recommend.push({
             id: comic.id,
             title: comic.title,
-            image: comic.pic
+            image: ReplaceImageApi(comic.pic)
           })
+          LogUtil.info(`随机推荐: ${ReplaceImageApi(comic.pic)}`)
         })
       })
       LogUtil.info(`随机推荐: ${res.length}`)

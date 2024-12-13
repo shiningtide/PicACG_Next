@@ -12,11 +12,6 @@ export default struct ComicInfo {
   @Consume('pageStack') pageStack: NavPathStack
   @State comic: ComicCardInterface | undefined = undefined
 
-  aboutToAppear(): void {
-    this.comic = this.pageStack.getParamByName('ComicInfo')[0] as ComicCardInterface
-    LogUtil.info('本子详情页：', this.comic.id, ' - ', this.comic.title)
-  }
-
   build() {
     NavDestination() {
       Column() {
@@ -32,7 +27,8 @@ export default struct ComicInfo {
     .mode(NavDestinationMode.STANDARD)
     .hideTitleBar(true)
     .onReady((context: NavDestinationContext) => {
-      this.pageStack = context.pathStack
+      this.comic = context.pathInfo.param as ComicCardInterface
+      LogUtil.info('本子详情页：', this.comic.id, ' - ', this.comic.title)
     })
   }
 }

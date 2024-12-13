@@ -1,4 +1,4 @@
-import { LogUtil } from '@pura/harmony-utils'
+import { LogUtil, ObjectUtil } from '@pura/harmony-utils'
 import { ComicResponse, comics, random, search } from '../../api/comic'
 import { SortType } from '../../api/models'
 import { SortItems } from '../../common/Config'
@@ -6,6 +6,7 @@ import { PreferenceItem } from '../../utils/Preference'
 import ComicList, { ComicListAttribute } from '../component/ComicList'
 import { BackType, TitleBar, TitleType } from '../component/TitleBar'
 import { SymbolGlyphModifier } from '@kit.ArkUI'
+import { StorageKey } from '../../common/Consts'
 
 @Builder
 export function ComicListViewBuilder(name: string, param: Object) {
@@ -14,19 +15,15 @@ export function ComicListViewBuilder(name: string, param: Object) {
 
 @Component
 export default struct ComicListView {
-  @StorageProp('topRectHeight') topRectHeight: number = 0
   @StorageProp('bottomRectHeight') bottomRectHeight: number = 0
+  @StorageLink(StorageKey.CATEGORY) category: string[] = []
   @Consume('pageStack') pageStack: NavPathStack
   @State searchParam: ComicListOptions | undefined = undefined
   @State attr: ComicListAttribute | undefined = undefined
   @State @Watch('sortChange') sort: SortType = SortType.Newest
-  @State @Watch('categoryChange') category: string[] = []
+  @State @Watch('categoryChange') filterCategory: string[] = []
   @State showCategory: boolean = false
-
-  aboutToAppear(): void {
-    this.searchParam = this.pageStack.getParamByName('ComicListView')[0] as ComicListOptions
-    this.buildAttr()
-  }
+  @State tempSelectedCategory: string[] = []
 
   sortChange() {
     this.buildAttr()
@@ -44,7 +41,7 @@ export default struct ComicListView {
         api: search,
         sort: this.sort,
         param1: this.searchParam.key,
-        param2: this.category
+        param2: this.filterCategory
       }
     } else if (this.searchParam?.type === SearchType.Category) {
       // 分类查询
@@ -100,7 +97,7 @@ export default struct ComicListView {
           }
         })
 
-        ComicList({ attr: this.attr, canSwipe: false })
+        ComicList({ attr: this.attr, canSwipe: false, showFilter: true })
       }
       .height('100%')
       .width('100%')
@@ -115,6 +112,9 @@ export default struct ComicListView {
         .height(0)
         .borderRadius({ topRight: 30, bottomRight: 30 })
         .bindSheet(this.showCategory, this.categoryFilter(), {
+          title: {
+            title: '限定分类',
+          },
           height: SheetSize.FIT_CONTENT,
           showClose: false,
           dragBar: false,
@@ -127,13 +127,72 @@ export default struct ComicListView {
     .mode(NavDestinationMode.STANDARD)
     .hideTitleBar(true)
     .onReady((context: NavDestinationContext) => {
-      this.pageStack = context.pathStack
+      this.searchParam = context.pathInfo.param as ComicListOptions
+      this.buildAttr()
     })
   }
 
   @Builder
   categoryFilter() {
+    Column() {
+      GridRow() {
+        ForEach(this.category, (key: string) => {
+          GridCol({
+            span: 6
+          }) {
+            Row() {
+              Checkbox({ name: key, group: 'checkboxGroup' })
+                .select(this.tempSelectedCategory.indexOf(key) >= 0)
+                .selectedColor($r('app.color.custom_pink'))
+                .shape(CheckBoxShape.ROUNDED_SQUARE)
+                .onChange((selected: boolean) => {
+                  if (selected) {
+                    this.tempSelectedCategory.push(key)
+                  } else {
+                    this.tempSelectedCategory = this.tempSelectedCategory.filter(k => k !== key)
+                  }
+                })
+                .mark({
+                  size: 50,
+                  strokeWidth: 5
+                })
+                .width(20)
+                .height(20)
+              Text(key)
+                .fontSize(16)
+                .onClick(() => {
+                  LogUtil.info('onClick')
+                  if (this.tempSelectedCategory.indexOf(key) < 0) {
+                    LogUtil.info('selected: ', key)
+                    this.tempSelectedCategory.push(key)
+                  } else {
+                    LogUtil.info('unselected: ', key)
+                    this.tempSelectedCategory = this.tempSelectedCategory.filter(k => k !== key)
+                  }
+                })
+            }
+            .width('100%')
+          }
+        })
+      }
+      .margin({ bottom: 20 })
 
+      Button('确认搜索')
+        .width('100%')
+        .stateEffect(false)
+        .type(ButtonType.Normal)
+        .borderRadius(10)
+        .backgroundColor($r('app.color.common_button_background_light'))
+        .clickEffect({ level: ClickEffectLevel.LIGHT })
+        .onClick(() => {
+          animateTo({ duration: 500 }, () => {
+            this.showCategory = false
+            this.filterCategory = ObjectUtil.deepCopy(this.tempSelectedCategory)
+          })
+        })
+    }.width('100%')
+    .margin({ bottom: this.bottomRectHeight })
+    .padding({ left: 20, right: 20 })
   }
 
   @Builder
@@ -181,6 +240,11 @@ export default struct ComicListView {
         .fillColor($r('app.color.common_button_background_light'))
         .margin({ right: 10 })
         .visibility(this.searchParam?.type === SearchType.Custom ? Visibility.Visible : Visibility.None)
+        .enabled(!this.showCategory)
+        .onClick(() => {
+          LogUtil.info('category: ', this.category.toString())
+          this.showCategory = true
+        })
 
       Image($r('app.media.ic_public_search'))
         .height(20)
