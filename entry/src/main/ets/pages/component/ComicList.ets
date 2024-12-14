@@ -163,7 +163,9 @@ export default struct ComicList {
           endMargin: 20
         })
         .scrollBar(BarState.Off)
-        .onReachEnd(() => {
+        .onScrollIndex((_: number, end: number) => {
+          LogUtil.info(`${end}`)
+          this.isEnd = end + 5 >= this.comics.length
           if (this.isEnd && this.page < this.maxPage) {
             LogUtil.info('onReachEnd到底辣！！！要加载更多')
             this.page++
@@ -172,9 +174,6 @@ export default struct ComicList {
               this.loadComics()
             })
           }
-        })
-        .onScrollIndex((start: number, end: number) => {
-          this.isEnd = end + 1 === this.comics.length
         })
       }
       .onRefreshing(() => {

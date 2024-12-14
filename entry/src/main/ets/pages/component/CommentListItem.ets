@@ -1,7 +1,10 @@
 import { ImageKnifeComponent } from '@ohos/imageknife'
 import { DateUtil } from '@pura/harmony-utils'
+import { commentLike } from '../../api/comic'
 import { PreferenceStorageKey } from '../../utils/Preference'
 import { ComicCardInterface } from './ComicCard'
+import { promptAction } from '@kit.ArkUI'
+import CommentList from './CommentList'
 
 @Component
 export default struct CommentListItem {
@@ -10,6 +13,7 @@ export default struct CommentListItem {
   @Prop _id: string
   @Prop content: string
   @Prop likesCount: number
+  @Prop isLike: boolean
   @Prop commentsCount: number
   @Prop createTime: string
   @Prop comicTitle: string
@@ -17,9 +21,13 @@ export default struct CommentListItem {
   @Prop avatar: string
   @Prop name: string = ''
   @Prop slogan: string
+  @State showChildren: boolean = false
+  @State currentChildrenPage: number = 1
+  @State maxChildrenPage: number = 1
 
   build() {
     Row() {
+      // 头像
       Column() {
         ImageKnifeComponent({
           imageKnifeOption: {
@@ -39,47 +47,85 @@ export default struct CommentListItem {
       .padding({ left: 8, top: 8 })
       .margin({ right: 14 })
 
+      // 评论信息
       Column() {
+        // 昵称 + 评论时间
         Row() {
           Text(`${this.name}`)
-            .fontWeight(FontWeight.Bold)
+            .width('50%')
             .maxLines(1)
+            .minFontSize(10)
+            .fontWeight(FontWeight.Bold)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .width('70%')
+            .heightAdaptivePolicy(TextHeightAdaptivePolicy.MIN_FONT_SIZE_FIRST)
 
           Text(DateUtil.getTipDateStr(new Date(this.createTime)))
+            .width('50%')
+            .maxLines(1)
+            .minFontSize(10)
+            .maxFontSize(14)
             .fontColor(Color.Gray)
-            .fontSize(14)
             .textAlign(TextAlign.End)
-            .width('30%')
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+            .heightAdaptivePolicy(TextHeightAdaptivePolicy.MIN_FONT_SIZE_FIRST)
         }
+        .padding({ right: 20 })
 
+        // 评论内容
         Row() {
           Text(`${this.content}`)
             .width('100%')
+            .padding({ right: 20 })
         }
         .margin({ top: 5, bottom: 10 })
 
+        // 操作按钮
         Row() {
+          // 喜欢
           Row() {
             Image($r('app.media.ic_public_heart'))
               .width(14)
+              .fillColor(this.isLike ? $r('app.color.custom_pink') : undefined)
             Text(`${this.likesCount}`)
               .fontSize(14)
               .margin({ left: 5 })
           }
+          .onClick(() => {
+            commentLike(this._id).then(res => {
+              if (res.action === 'like') {
+                promptAction.showToast({ message: '喜欢成功', });
+                this.isLike = true
+                this.likesCount++
+              } else {
+                promptAction.showToast({ message: '取消喜欢成功', });
+                this.isLike = false
+                this.likesCount--
+              }
+            })
+          })
 
-          Row() {
-            Image($r('app.media.ic_public_comments'))
-              .width(13)
-            Text(`${this.commentsCount}`)
-              .fontSize(14)
-              .margin({ left: 5 })
+          // 楼中楼
+          if (this.commentsCount >= 0) {
+            Row() {
+              Image($r('app.media.ic_public_comments'))
+                .width(13)
+              Text(`${this.commentsCount}`)
+                .fontSize(14)
+                .margin({ left: 5 })
+            }
+            .margin({ left: 15 })
+            .onClick(() => {
+              if (this.commentsCount > 0) {
+                this.showChildren = !this.showChildren
+              } else {
+                this.showChildren = false
+              }
+            })
           }
-          .margin({ left: 15 })
         }
         .width('100%')
 
+        // 本子超链接
         if (this.comicId && this.comicTitle) {
           Row() {
             Text(`>>> ${this.comicTitle}`)
@@ -96,13 +142,24 @@ export default struct CommentListItem {
           }
           .width('100%')
         }
+
+        // 楼中楼
+        if (this.showChildren) {
+          Column() {
+            CommentList({ commentId: this._id })
+              .constraintSize({ minHeight: 100, maxHeight: '60%' })
+          }
+          .width('100%')
+          .backgroundColor('#f8f9fa')
+          .layoutWeight(1)
+        }
       }
       .width('100%')
-      .height('100%')
+      .constraintSize({ minHeight: 100, maxHeight: '100%' })
+      .padding({ bottom: 10 })
       .layoutWeight(1)
     }
     .width('100%')
-    .height(100)
     .constraintSize({ minHeight: 100, maxHeight: '100%' })
     .padding({ top: 10 })
     .layoutWeight(1)
