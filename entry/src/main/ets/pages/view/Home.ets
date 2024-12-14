@@ -1,12 +1,13 @@
 import { ImageKnifeComponent } from '@ohos/imageknife'
-import { LogUtil, ToastUtil } from '@pura/harmony-utils'
+import { LogUtil } from '@pura/harmony-utils'
 import { SlidingTabsV1 } from '@xqw/sliding-tabs'
 import { SlidingTabControllerV1 } from '@xqw/sliding-tabs/src/main/ets/v1/SlidingTabControllerV1'
 import { User } from '../../api/models'
-import { favourite, profile, punchIn } from '../../api/profile'
+import { myFavourite, profile, punchIn } from '../../api/profile'
 import { PreferenceStorageKey } from '../../utils/Preference'
 import ComicList from '../component/ComicList'
 import CommentList from '../component/CommentList'
+import { promptAction } from '@kit.ArkUI'
 
 @Component
 export default struct Home {
@@ -84,7 +85,7 @@ export default struct Home {
               .onClick(() => {
                 punchIn()
                   .finally(() => {
-                    ToastUtil.showToast('签到成功')
+                    promptAction.showToast({ message: '签到成功', });
                     this.loadProfile()
                   })
               })
@@ -136,7 +137,7 @@ export default struct Home {
         .width('100%').height('100%')
 
         Stack() {
-          ComicList({ attr: { type: 'remote', api: favourite } })
+          ComicList({ attr: { type: 'remote', api: myFavourite } })
         }
         .width('100%').height('100%')
 

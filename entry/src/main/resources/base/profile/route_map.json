@@ -1,9 +1,9 @@
 {
   "routerMap": [
     {
-      "name": "ComicInfo",
-      "pageSourceFile": "src/main/ets/pages/view/ComicInfo.ets",
-      "buildFunction": "ComicInfoBuilder"
+      "name": "ComicDetail",
+      "pageSourceFile": "src/main/ets/pages/view/ComicDetail.ets",
+      "buildFunction": "ComicDetailBuilder"
     },
     {
       "name": "ComicContent",

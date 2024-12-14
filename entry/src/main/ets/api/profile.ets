@@ -12,8 +12,8 @@ export interface CommentResponse {
   topComments: Comment[] // 格式存疑待验证
 }
 
-export interface FavouriteActionResponse {
-  action: 'favourite' | 'un_favourite'
+export interface ComicActionResponse {
+  action: 'favourite' | 'un_favourite' | 'like' | 'unlike'
 }
 
 export interface PunchInResponse {
@@ -26,13 +26,17 @@ export const profile = (): Promise<ProfileResponse> => {
 }
 
 /**我的最爱*/
-export const favourite = (page: number = 1, s: SortType = SortType.Newest): Promise<ComicResponse> => {
+export const myFavourite = (page: number = 1, s: SortType = SortType.Newest): Promise<ComicResponse> => {
   return HttpUtil.get('/users/favourite', { page, s })
 }
 
 /**收藏操作，未收藏漫画调用后进入收藏，已收藏漫画调用后删除收藏*/
-export const favouriteAction = (id: string): Promise<FavouriteActionResponse> => {
+export const favouriteAction = (id: string): Promise<ComicActionResponse> => {
   return HttpUtil.post(`/comics/${id}/favourite`)
+}
+
+export const likeAction = (id: string): Promise<ComicActionResponse> => {
+  return HttpUtil.post(`/comics/${id}/like`)
 }
 
 /**我的评论*/

@@ -118,7 +118,7 @@ export default struct ComicListItem {
         image: this.image,
         title: this.title
       }
-      this.pageStack.pushPathByName('ComicInfo', comic)
+      this.pageStack.pushPathByName('ComicDetail', comic)
     })
   }
 

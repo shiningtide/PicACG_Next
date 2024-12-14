@@ -89,7 +89,7 @@ export default struct CommentListItem {
               .textOverflow({ overflow: TextOverflow.Ellipsis })
               .onClick(() => {
                 this.pageStack.pushPath({
-                  name: 'ComicInfo',
+                  name: 'ComicDetail',
                   param: { id: this.comicId, title: this.comicTitle } as ComicCardInterface
                 })
               })

@@ -5,18 +5,19 @@ import { ComicDetailInfo, ComicEp } from '../../api/models'
 import { PreferenceStorageKey } from '../../utils/Preference'
 import { ComicCardInterface } from '../component/ComicCard'
 import { BackType, TitleBar, TitleType } from '../component/TitleBar'
-import { Chip, ChipSize, LengthUnit } from '@kit.ArkUI'
+import { Chip, ChipSize, LengthUnit, promptAction } from '@kit.ArkUI'
 import { ComicListOptions, SearchType } from './ComicListView'
 import ComicCardScroll from '../component/ComicCardScroll'
 import CommentList from '../component/CommentList'
+import { favouriteAction, likeAction } from '../../api/profile'
 
 @Builder
-export function ComicInfoBuilder(name: string, param: Object) {
-  ComicInfo()
+export function ComicDetailBuilder(name: string, param: Object) {
+  ComicDetail()
 }
 
 @Component
-export default struct ComicInfo {
+export default struct ComicDetail {
   @StorageProp('bottomRectHeight') bottomRectHeight: number = 0
   @StorageProp(PreferenceStorageKey.PRIVACY_MODE) privacyMode: boolean = false
   @StorageProp(PreferenceStorageKey.IMAGE_API) imageApi: string = ''
@@ -202,6 +203,13 @@ export default struct ComicInfo {
               .onClick(() => {
                 if (this.detail) {
                   this.detail.isFavourite = !this.detail.isFavourite
+                  favouriteAction(this.detail._id).then(res => {
+                    if (res.action === 'favourite') {
+                      promptAction.showToast({ message: '收藏成功', });
+                    } else {
+                      promptAction.showToast({ message: '取消收藏成功', });
+                    }
+                  })
                 }
                 LogUtil.info('点击收藏')
               })
@@ -227,6 +235,13 @@ export default struct ComicInfo {
                 .onClick(() => {
                   if (this.detail) {
                     this.detail.isLiked = !this.detail.isLiked
+                    likeAction(this.detail._id).then(res => {
+                      if (res.action === 'like') {
+                        promptAction.showToast({ message: '喜欢成功', });
+                      } else {
+                        promptAction.showToast({ message: '取消喜欢成功', });
+                      }
+                    })
                   }
                   LogUtil.info('点击喜欢')
                 })

@@ -1,4 +1,4 @@
-import { LogUtil, ToastUtil } from '@pura/harmony-utils';
+import { LogUtil } from '@pura/harmony-utils';
 import { ComicResponse } from '../../api/comic';
 import { ComicDetailInfo, ComicSimpleInfo, SortType } from '../../api/models';
 import { favouriteAction } from '../../api/profile';
@@ -6,6 +6,7 @@ import { StorageKey } from '../../common/Consts';
 import { HistoryUtil } from '../../utils/History';
 import { PreferenceStorageKey } from '../../utils/Preference';
 import ComicListItem from './ComicListItem';
+import { promptAction } from '@kit.ArkUI';
 
 @Component
 export default struct ComicList {
@@ -217,7 +218,7 @@ export default struct ComicList {
           animateTo({ duration: 500 }, () => {
             this.comics = this.comics.filter(c => c._id !== comic._id)
           })
-          ToastUtil.showToast('已取消收藏')
+          promptAction.showToast({ message: '已取消收藏', });
         }
       })
 

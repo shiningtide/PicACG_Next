@@ -46,8 +46,7 @@ export default struct ComicCard {
     })
     .onClick(() => {
       LogUtil.info(`点击了本子：${this.comic.id} - ${this.comic.title}`)
-      // this.pageStack.pushPath({ name: 'ComicInfo', param: this.comic })
-      this.pageStack.pushPathByName('ComicInfo', this.comic)
+      this.pageStack.pushPathByName('ComicDetail', this.comic)
     })
   }
 }
