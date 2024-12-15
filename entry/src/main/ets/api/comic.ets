@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from '@ohos/axios'
 import { MD5, RandomUtil } from '@pura/harmony-utils'
 import { HttpUtil } from '../utils/Http'
 import { PicaPage } from '../common/Model'
-import { Category, ComicDetailInfo, ComicEp, ComicSimpleInfo, SortType } from './models'
+import { Category, Chapter, ComicDetailInfo, ComicEp, ComicSimpleInfo, SortType } from './models'
 import { ComicActionResponse, CommentResponse } from './profile'
 
 export interface CollectionResponse {
@@ -48,6 +48,11 @@ export interface KeywordResponse {
   keywords: string[]
 }
 
+export interface ChapterResponse {
+  ep: ComicEp,
+  pages: PicaPage<Chapter>
+}
+
 /**另一个推荐接口: 其他人还在看(不需要认证)*/
 export const otherRecommend = (_id?: string) => {
   if (!_id) {
@@ -70,18 +75,18 @@ export const collections = (): Promise<CollectionResponse> => {
 }
 
 /**相关推荐*/
-export const recommendation = (_id: string): Promise<RecommendResponse> => {
-  return HttpUtil.get(`/comics/${_id}/recommendation`)
+export const recommendation = (comicId: string): Promise<RecommendResponse> => {
+  return HttpUtil.get(`/comics/${comicId}/recommendation`)
 }
 
 /**漫画详细信息*/
-export const detail = (_id?: string): Promise<DetailResponse> => {
-  return HttpUtil.get(`/comics/${_id}`)
+export const detail = (comicId?: string): Promise<DetailResponse> => {
+  return HttpUtil.get(`/comics/${comicId}`)
 }
 
 /**漫画目录*/
-export const eps = (_id: string, page: number = 1): Promise<EpsResponse> => {
-  return HttpUtil.get(`/comics/${_id}/eps`, { page })
+export const eps = (comicId: string, page: number = 1): Promise<EpsResponse> => {
+  return HttpUtil.get(`/comics/${comicId}/eps`, { page })
 }
 
 /**分类*/
@@ -149,4 +154,9 @@ export const commentLike = (commentId: string): Promise<ComicActionResponse> => 
 /**漫画楼中楼*/
 export const commentsChildren = (page: number = 1, commentId: string): Promise<CommentResponse> => {
   return HttpUtil.get(`/comments/${commentId}/childrens`, { page })
+}
+
+/**漫画章节内容*/
+export const chapter = (comicId: string, order: number = 1, page: number = 1): Promise<ChapterResponse> => {
+  return HttpUtil.get(`/comics/${comicId}/order/${order}/pages`, { page })
 }

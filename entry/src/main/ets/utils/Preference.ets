@@ -33,7 +33,8 @@ export class PreferenceManager {
     { name: '线路三', value: AppChannel.Three, key: 'Three' },
   ]
   static readonly ImageApiItem: PreferenceItem[] = [
-    { name: '代理', value: ImageApi.Proxy, key: 'Proxy' },
+    { name: '代理一', value: ImageApi.ProxyOne, key: 'ProxyOne' },
+    { name: '代理二', value: ImageApi.ProxyTwo, key: 'ProxyTwo' },
     { name: '分流一', value: ImageApi.TriageOne, key: 'TriageOne' },
     { name: '分流二', value: ImageApi.TriageTwo, key: 'TriageTwo' },
     { name: '分流三', value: ImageApi.TriageThree, key: 'TriageThree' },
@@ -42,7 +43,7 @@ export class PreferenceManager {
   static init() {
     // Api地址
     PersistentStorage.persistProp<Api>(PreferenceStorageKey.API, Api.Proxy)
-    PersistentStorage.persistProp<ImageApi>(PreferenceStorageKey.IMAGE_API, ImageApi.Proxy)
+    PersistentStorage.persistProp<ImageApi>(PreferenceStorageKey.IMAGE_API, ImageApi.ProxyOne)
     HttpUtil.init()
     // 画质
     PersistentStorage.persistProp<ImageQuality>(PreferenceStorageKey.IMAGE_QUALITY, ImageQuality.Original)

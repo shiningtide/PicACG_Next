@@ -6,9 +6,9 @@
       "buildFunction": "ComicDetailBuilder"
     },
     {
-      "name": "ComicContent",
-      "pageSourceFile": "src/main/ets/pages/view/ComicContent.ets",
-      "buildFunction": "ComicContentBuilder"
+      "name": "ComicReader",
+      "pageSourceFile": "src/main/ets/pages/view/ComicReader.ets",
+      "buildFunction": "ComicReaderBuilder"
     },
     {
       "name": "ComicListView",

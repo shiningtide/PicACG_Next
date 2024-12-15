@@ -10,6 +10,8 @@ import { ComicListOptions, SearchType } from './ComicListView'
 import ComicCardScroll from '../component/ComicCardScroll'
 import CommentList from '../component/CommentList'
 import { favouriteAction, likeAction } from '../../api/profile'
+import { ComicChapterInterface } from './ComicReader'
+import { HistoryUtil } from '../../utils/History'
 
 @Builder
 export function ComicDetailBuilder(name: string, param: Object) {
@@ -161,8 +163,10 @@ export default struct ComicDetail {
                 allowClose: false,
                 size: ChipSize.SMALL,
                 onClicked: () => {
-                  this.pageStack.pushPathByName('ComicListView',
-                    { type: SearchType.Custom, key: key } as ComicListOptions)
+                  this.pageStack.pushPathByName(
+                    'ComicListView',
+                    { type: SearchType.Custom, key: key } as ComicListOptions,
+                  )
                 }
               })
             })
@@ -185,7 +189,7 @@ export default struct ComicDetail {
                 .width('80%')
                 .backgroundColor($r('app.color.custom_pink'))
                 .onClick(() => {
-                  this.pageStack.pushPathByName('ComicContent', this.comic)
+                  this.goToReader(1)
                 })
             }
             .width('49%')
@@ -338,8 +342,11 @@ export default struct ComicDetail {
                   Text(ep.title)
                     .fontColor($r('app.color.custom_pink'))
                     .maxLines(2)
+                    .minFontSize(10)
+                    .maxFontSize(16)
                     .textOverflow({ overflow: TextOverflow.Ellipsis })
                     .heightAdaptivePolicy(TextHeightAdaptivePolicy.MAX_LINES_FIRST)
+                    .margin(3)
                 }
                 .width(105)
                 .height(40)
@@ -348,6 +355,9 @@ export default struct ComicDetail {
                 .borderWidth(2)
                 .borderColor($r('app.color.custom_pink'))
                 .borderRadius(10)
+                .onClick(() => {
+                  this.goToReader(ep.order)
+                })
               })
             }
           }
@@ -431,6 +441,16 @@ export default struct ComicDetail {
         }
       })
     })
+  }
+
+  goToReader(chapter: number) {
+    if (this.detail) {
+      HistoryUtil.add(this.detail)
+      this.pageStack.pushPathByName(
+        'ComicReader',
+        { comicId: this.detail._id, order: chapter } as ComicChapterInterface
+      )
+    }
   }
 
   formatString(str?: string): string {

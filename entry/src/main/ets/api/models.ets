@@ -95,6 +95,12 @@ export interface PunchIn {
   status: string
 }
 
+export interface Chapter {
+  id: string
+  _id: string
+  media: Thumb
+}
+
 export enum SortType {
   Newest = 'dd',
   Oldest = 'da',
