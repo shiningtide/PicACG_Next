@@ -6,6 +6,7 @@ import { ComicEp } from '../../api/models'
 import { PreferenceItem, PreferenceManager, PreferenceStorageKey } from '../../utils/Preference'
 import { BackType, TitleBar, TitleType } from '../component/TitleBar'
 import { ImageQuality } from '../../common/Config'
+import { HistoryUtil } from '../../utils/History'
 
 @Builder
 export function ComicReaderBuilder(name: string, param: Object) {
@@ -351,6 +352,7 @@ export default struct ComicReader {
   }
 
   load() {
+    HistoryUtil.get()
     chapter(this.chapter.comicId, this.chapter.order, this.page).then(res => {
       animateTo({ duration: 200 }, () => {
         this.title = res.ep.title
@@ -387,6 +389,7 @@ export default struct ComicReader {
   goToEp(order: number) {
     this.disappear = this.chapter.order < order ? TransitionEffect.move(TransitionEdge.START) :
     TransitionEffect.move(TransitionEdge.END)
+    HistoryUtil.setRead(this.chapter.comicId, order)
     animateTo({ duration: 500 }, () => {
       this.scroll.scrollToIndex(0, true)
       this.chapter.order = order

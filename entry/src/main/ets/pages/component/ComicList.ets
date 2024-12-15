@@ -32,36 +32,46 @@ export default struct ComicList {
     if (this.attr.type === 'history') {
       LogUtil.debug('加载浏览历史')
       setTimeout(() => {
-        animateTo({ duration: 500 }, () => {
-          this.comics = HistoryUtil.get()
-          this.isRefreshing = false
-          this.scroll.scrollEdge(Edge.Top)
-        })
+        this.loadHistory()
       }, 500)
     } else if (this.attr.type === 'remote') {
       LogUtil.debug('加载远程数据')
-      if (this.attr.api !== undefined) {
-        this.attr.api(this.page, this.attr.sort, this.attr.param1, this.attr.param2)
-          .then(res => {
-            animateTo({ duration: 500 }, () => {
-              if (this.page === 1) {
-                this.comics = res.comics.docs
-                this.scroll.scrollEdge(Edge.Top)
-              } else {
-                this.comics.push(...res.comics.docs)
-              }
-            })
-            LogUtil.debug(`加载第${this.page}页，共${res.comics.docs.length}条`)
-            this.page = res.comics.page
-            this.maxPage = res.comics.pages
+      this.loadRemote()
+    }
+  }
+
+  loadHistory() {
+    animateTo({ duration: 500 }, () => {
+      HistoryUtil.get().then(res => {
+        this.comics = res
+        this.isRefreshing = false
+        this.scroll.scrollEdge(Edge.Top)
+      })
+    })
+  }
+
+  loadRemote() {
+    if (this.attr.api !== undefined) {
+      this.attr.api(this.page, this.attr.sort, this.attr.param1, this.attr.param2)
+        .then(res => {
+          animateTo({ duration: 500 }, () => {
+            if (this.page === 1) {
+              this.comics = res.comics.docs
+              this.scroll.scrollEdge(Edge.Top)
+            } else {
+              this.comics.push(...res.comics.docs)
+            }
           })
-          .finally(() => {
-            animateTo({ duration: 500 }, () => {
-              this.isRefreshing = false
-              this.isLoading = false
-            })
+          LogUtil.debug(`加载第${this.page}页，共${res.comics.docs.length}条`)
+          this.page = res.comics.page
+          this.maxPage = res.comics.pages
+        })
+        .finally(() => {
+          animateTo({ duration: 500 }, () => {
+            this.isRefreshing = false
+            this.isLoading = false
           })
-      }
+        })
     }
   }
 

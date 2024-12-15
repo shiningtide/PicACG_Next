@@ -29,6 +29,7 @@ export default struct ComicDetail {
   @State eps: ComicEp[] = []
   @State recommend: ComicCardInterface[] = []
   @State showComments: boolean = false
+  @State currentOrder: number = 0
 
   build() {
     NavDestination() {
@@ -185,11 +186,11 @@ export default struct ComicDetail {
           Row() {
             // 开始阅读
             Column() {
-              Button('开始阅读')
+              Button(this.currentOrder > 0 ? '继续阅读' : '开始阅读')
                 .width('80%')
                 .backgroundColor($r('app.color.custom_pink'))
                 .onClick(() => {
-                  this.goToReader(1)
+                  this.goToReader(this.currentOrder > 0 ? this.currentOrder : 1)
                 })
             }
             .width('49%')
@@ -340,7 +341,7 @@ export default struct ComicDetail {
               ForEach(this.eps, (ep: ComicEp) => {
                 Button() {
                   Text(ep.title)
-                    .fontColor($r('app.color.custom_pink'))
+                    .fontColor(this.currentOrder === ep.order ? Color.White : $r('app.color.custom_pink'))
                     .maxLines(2)
                     .minFontSize(10)
                     .maxFontSize(16)
@@ -355,6 +356,7 @@ export default struct ComicDetail {
                 .borderWidth(2)
                 .borderColor($r('app.color.custom_pink'))
                 .borderRadius(10)
+                .backgroundColor(this.currentOrder === ep.order ? $r('app.color.custom_pink') : Color.White)
                 .onClick(() => {
                   this.goToReader(ep.order)
                 })
@@ -422,6 +424,17 @@ export default struct ComicDetail {
           })
         })
       })
+
+      HistoryUtil.getRead(this.comic.id).then(res => {
+        this.currentOrder = res
+      })
+    })
+    .onShown(() => {
+      if (this.detail) {
+        HistoryUtil.getRead(this.detail._id).then(res => {
+          this.currentOrder = res
+        })
+      }
     })
   }
 
@@ -446,6 +459,7 @@ export default struct ComicDetail {
   goToReader(chapter: number) {
     if (this.detail) {
       HistoryUtil.add(this.detail)
+      HistoryUtil.setRead(this.detail._id, chapter)
       this.pageStack.pushPathByName(
         'ComicReader',
         { comicId: this.detail._id, order: chapter } as ComicChapterInterface

@@ -3,8 +3,9 @@ import { Api, ImageApi, ImageQuality } from '../common/Config'
 import { StorageKey } from '../common/Consts'
 import { PreferenceItem, PreferenceManager, PreferenceStorageKey } from '../utils/Preference'
 import { BackType, TitleBar, TitleType } from './component/TitleBar'
-import { router } from '@kit.ArkUI'
+import { promptAction, router } from '@kit.ArkUI'
 import { DialogAction } from '@pura/harmony-utils/src/main/ets/entity/constraint'
+import { HistoryUtil } from '../utils/History'
 
 @Entry
 @Component
@@ -125,6 +126,29 @@ struct Settings {
       .margin({ top: 15 })
       .borderRadius(10)
 
+      Column() {
+        Row() {
+          Text('清除历史')
+            .padding({ left: 10 })
+            .width('87%')
+
+          Image($r('app.media.ic_public_arrow_right'))
+            .width(20)
+            .height(20)
+            .fillColor($r('app.color.common_button_background_light'))
+            .align(Alignment.End)
+        }
+        .width('90%')
+        .height(50)
+        .backgroundColor(Color.White)
+        .onClick(() => {
+          HistoryUtil.clear()
+          promptAction.showToast({ message: '浏览历史清空成功', });
+        })
+      }
+      .margin({ top: 15 })
+      .borderRadius(10)
+
       if (this.token) {
         Column() {
           Row() {
@@ -144,8 +168,6 @@ struct Settings {
           .onClick(() => {
             this.logout()
           })
-
-          Divider().width('90%')
         }
         .margin({ top: 15 })
         .borderRadius(10)

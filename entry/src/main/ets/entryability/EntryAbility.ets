@@ -6,12 +6,14 @@ import { AppUtil, LogUtil } from '@pura/harmony-utils'
 import { StorageKey } from '../common/Consts'
 import { PreferenceManager } from '../utils/Preference'
 import { ImageKnife } from '@ohos/imageknife'
+import { HistoryUtil } from '../utils/History'
 
 export default class EntryAbility extends UIAbility {
   async onCreate(want: Want, launchParam: AbilityConstant.LaunchParam) {
     hilog.info(0x0000, 'PicaAbilityLog', '%{public}s', 'Ability onCreate')
     AppUtil.init(this.context)
     LogUtil.init(0x0000, 'PicaLog', true)
+    await HistoryUtil.init()
     await ImageKnife.getInstance().initFileCache(this.context, 256, 256 * 1024 * 1024)
   }
 
