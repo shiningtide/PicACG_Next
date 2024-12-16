@@ -77,7 +77,8 @@ export class HistoryUtil {
 
   public static clear() {
     let hisIds = AppStorage.get<string[]>(StorageKey.HISTORY)
-    if (hisIds) {
+    if (hisIds?.length) {
+      LogUtil.info('开始清空历史: ', hisIds.join(','))
       AppStorage.set<string[]>(StorageKey.HISTORY, [])
       HistoryUtil.comicStore.deleteBatch([...hisIds]).then(() => {
         LogUtil.info('历史清空完成')
