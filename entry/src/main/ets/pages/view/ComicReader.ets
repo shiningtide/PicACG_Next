@@ -35,12 +35,16 @@ export default struct ComicReader {
   @State showToolbar: boolean = false
   @State showEps: boolean = false
   @State disappear: TransitionEffect = TransitionEffect.move(TransitionEdge.START)
+  @State scaleValue: number = 1
+  @State pinchValue: number = 1;
+  @State offsetX: number = 0;
+  @State offsetY: number = 0;
+  @State positionX: number = 0;
+  @State positionY: number = 0;
   private scroll: Scroller = new Scroller()
   private scrollIndexStart: number = 1
   private scrollIndexEnd: number = 1
-  private startX: number = 0
-  private startY: number = 0
-  private startTime: number = 0
+  private inPan: boolean = false
 
   build() {
     NavDestination() {
@@ -68,6 +72,8 @@ export default struct ComicReader {
         .height('100%')
         .contentStartOffset(this.topRectHeight)
         .scrollBar(BarState.Off)
+        .scale({ x: this.scaleValue, y: this.scaleValue, z: 1 })
+        .offset({ x: this.offsetX, y: this.offsetY })
         .onScrollIndex((start: number, end: number) => {
           this.scrollIndexStart = start
           this.scrollIndexEnd = end
@@ -81,42 +87,99 @@ export default struct ComicReader {
             })
           }
         })
-        .onTouch(e => {
-          if (e.type === TouchType.Down) {
-            this.startX = e.touches[0].x
-            this.startY = e.touches[0].y
-            this.startTime = Date.now()
-          } else if (e.type === TouchType.Up) {
-            const endX = e.touches[0].x
-            const endY = e.touches[0].y
-            const endTime = Date.now()
-
-            const timeDiff = endTime - this.startTime
-            const distance = Math.sqrt(Math.pow(endX - this.startX, 2) + Math.pow(endY - this.startY, 2))
-
-            if (timeDiff < 200 && distance < 10) {
-              if (endX < this.windowWidth * 0.34 || endY < this.windowHeight * 0.3) {
-                LogUtil.info('点击上一页')
-                animateTo({ duration: 500 }, () => {
-                  // this.scroll.scrollPage({ next: false })
-                  this.scroll.scrollToIndex(this.scrollIndexStart, true)
-                })
-              } else if (endX > this.windowWidth * 0.66 || endY > this.windowHeight * 0.7) {
-                LogUtil.info('点击下一页')
-                animateTo({ duration: 500 }, () => {
-                  // this.scroll.scrollPage({ next: true })
-                  this.scroll.scrollToIndex(this.scrollIndexEnd, true)
-                })
-              } else {
-                LogUtil.info('点击中间')
-                animateTo({ duration: 300 }, () => {
-                  this.showToolbar = true
-                  this.showSystemBar(true)
-                })
-              }
-            }
+        .onWillScroll((scrollOffset) => {
+          if (this.inPan) {
+            return { offsetRemain: 0 }
           }
+          return { offsetRemain: scrollOffset }
         })
+        .gesture(GestureGroup(GestureMode.Exclusive,
+          // 双指缩放
+          PinchGesture({ fingers: 2 }).onActionStart(e => {
+            LogUtil.info('双指缩放开始，当前缩放倍率：', this.scaleValue.toString());
+          }).onActionUpdate(e => {
+            if (e) {
+              this.scaleValue = this.pinchValue * e.scale;
+              LogUtil.info('正在执行缩放，当前缩放倍率：', this.scaleValue.toString());
+            }
+          }).onActionEnd(e => {
+            animateTo({ duration: 300 }, () => {
+              if (this.scaleValue < 1) {
+                this.scaleValue = 1
+                this.offsetX = 0
+                this.offsetY = 0
+              } else if (this.scaleValue > 3) {
+                this.scaleValue = 3
+              }
+            })
+            this.pinchValue = this.scaleValue;
+            LogUtil.info('双指缩放结束，当前缩放倍率：', this.scaleValue.toString());
+          }),
+          // 拖动平移
+          PanGesture().onActionStart((event: GestureEvent | undefined) => {
+            LogUtil.info(`拖动开始，当前偏移：${this.offsetX} ${this.offsetY}`);
+            this.inPan = true
+          }).onActionUpdate((event: GestureEvent | undefined) => {
+            if (event && this.scaleValue > 1) {
+              // 动态计算缩放后的组件宽高
+              const scaledWidth = this.windowWidth * this.scaleValue;
+              const scaledHeight = this.windowHeight * this.scaleValue;
+              // 容器的边界
+              const containerLeft = 0;
+              const containerRight = this.windowWidth;
+              const containerTop = 0;
+              const containerBottom = this.windowHeight;
+              // 组件的边界（拖动后不能超过容器的范围）
+              const minX = containerLeft - (scaledWidth - this.windowWidth) / 2;
+              const maxX = containerRight - this.windowWidth + (scaledWidth - this.windowWidth) / 2;
+              const minY = containerTop - (scaledHeight - this.windowHeight) / 2;
+              const maxY = containerBottom - this.windowHeight + (scaledHeight - this.windowHeight) / 2;
+              // 更新偏移量，并限制在边界内
+              const newOffsetX = this.positionX + event.offsetX * 5;
+              const newOffsetY = this.positionY + event.offsetY * 5;
+
+              this.offsetX = Math.min(Math.max(newOffsetX, minX), maxX);
+              this.offsetY = Math.min(Math.max(newOffsetY, minY), maxY);
+              LogUtil.info(`正在拖动，当前偏移：${this.offsetX} ${this.offsetY}`);
+            }
+          }).onActionEnd(() => {
+            animateTo({ duration: 300 }, () => {
+              if (this.scaleValue === 1) {
+                this.offsetX = 0
+                this.offsetY = 0
+              }
+            })
+            this.positionX = this.offsetX;
+            this.positionY = this.offsetY;
+            LogUtil.info(`拖动结束，当前偏移：${this.offsetX} ${this.offsetY}`);
+            this.inPan = false
+          }),
+          // 单击
+          TapGesture({ count: 1, fingers: 1 }).onAction((event) => {
+            LogUtil.info('触发单击')
+            let x = event.fingerList[0].globalX
+            let y = event.fingerList[0].globalY
+            if (x < this.windowWidth * 0.34 || y < this.windowHeight * 0.3) {
+              LogUtil.info('点击上一页')
+              animateTo({ duration: 500 }, () => {
+                // this.scroll.scrollPage({ next: false })
+                this.scroll.scrollToIndex(this.scrollIndexStart, true)
+              })
+            } else if (x > this.windowWidth * 0.66 || y > this.windowHeight * 0.7) {
+              LogUtil.info('点击下一页')
+              animateTo({ duration: 500 }, () => {
+                // this.scroll.scrollPage({ next: true })
+                this.scroll.scrollToIndex(this.scrollIndexEnd, true)
+              })
+            } else {
+              LogUtil.info('点击中间')
+              animateTo({ duration: 300 }, () => {
+                this.showToolbar = true
+                this.showSystemBar(true)
+              })
+            }
+          }),
+        ))
 
         if (this.showToolbar) {
           Column() {

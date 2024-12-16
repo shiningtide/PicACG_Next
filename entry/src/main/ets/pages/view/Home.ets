@@ -132,7 +132,7 @@ export default struct Home {
       })
       Swiper(this.tabController4.swiperController) {
         Stack() {
-          ComicList({ attr: { type: 'history' } })
+          ComicList({ attr: { type: 'history' }, canSwipe: false })
         }
         .width('100%').height('100%')
 
