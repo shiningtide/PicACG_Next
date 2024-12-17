@@ -84,7 +84,7 @@ export default struct ComicListView {
           titleBarColor: Color.White,
           statusBarColor: Color.White,
           centerType: TitleType.TEXT,
-          centerText: this.searchParam?.key,
+          centerText: this.searchParam?.title ? this.searchParam?.title : this.searchParam?.key,
           centerTextColor: $r('app.color.common_button_background_light'),
           leftBackType: BackType.NONE,
           leftBackFillColor: $r('app.color.common_button_background_light'),
@@ -258,6 +258,7 @@ export default struct ComicListView {
 
 export interface ComicListOptions {
   type: SearchType
+  title?: string
   key?: string
 }
 

@@ -54,22 +54,21 @@ const LocalCategories: LocalCategory[] = [
     router: 'Rank'
   },
   {
-    title: '嗶咔留言板',
+    title: '哔咔留言板',
     img: $r('app.media.cat_forum'),
-    // 'link': '/pcomments/?cid=5822a6e3ad7ede654696e482&ishide=999',
     router: 'Comments'
   },
   {
     title: '最近更新',
     img: $r('app.media.cat_latest'),
     router: 'ComicListView',
-    param: { type: SearchType.Category }
+    param: { type: SearchType.Category, title: '最近更新' }
   },
   {
-    title: '隨機本子',
+    title: '随机本子',
     img: $r('app.media.cat_random'),
     router: 'ComicListView',
-    param: { type: SearchType.Random }
+    param: { type: SearchType.Random, title: '随机本子' }
   }
 ]
 
