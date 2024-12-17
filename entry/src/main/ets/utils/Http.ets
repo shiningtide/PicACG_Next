@@ -29,6 +29,7 @@ import { router } from '@kit.ArkUI'
 
 export class HttpUtil {
   private static instance: AxiosInstance
+  private static isShowTimeout: boolean = false
 
   public static init() {
     HttpUtil.instance = axios.create(HttpUtil.defaultConfig())
@@ -151,10 +152,17 @@ export class HttpUtil {
       // 对响应错误做点什么
       if (error.message.toLowerCase().includes(Timeout)) {
         LogUtil.error(`接口请求失败：连接超时`)
-        DialogUtil.showConfirmDialog({
-          title: '连接超时',
-          message: '请检查网络连通情况，或在设置中修改接口线路后重启应用'
-        })
+        if (!HttpUtil.isShowTimeout) {
+          HttpUtil.isShowTimeout = true
+          DialogUtil.showConfirmDialog({
+            title: '连接超时',
+            message: '请检查网络连通情况，或在设置中修改接口线路后重启应用',
+            onWillDismiss: () => {
+              HttpUtil.isShowTimeout = false
+            }
+          })
+        }
+
         return Promise.reject(new Error(Timeout))
       } else {
         if (error.response) {
