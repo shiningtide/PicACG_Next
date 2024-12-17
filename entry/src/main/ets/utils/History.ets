@@ -33,8 +33,9 @@ export class HistoryUtil {
       let hisIds = AppStorage.get<string[]>(StorageKey.HISTORY)
       if (hisIds) {
         if (hisIds.indexOf(comic._id) < 0) {
-          hisIds.push(comic._id)
+          hisIds.splice(0, 0, comic._id)
         } else {
+          hisIds.splice(hisIds.indexOf(comic._id), 1)
           hisIds.splice(0, 0, comic._id)
         }
       } else {
