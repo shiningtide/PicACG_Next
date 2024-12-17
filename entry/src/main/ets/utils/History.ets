@@ -28,20 +28,28 @@ export class HistoryUtil {
   }
 
   public static add(comic: ComicDetailInfo) {
-    HistoryUtil.comicStore.put(comic._id, JSON.stringify(comic), (callback) => {
-      LogUtil.info('历史添加回调：', JSON.stringify(callback))
+    HistoryUtil.comicStore.put(comic._id, JSON.stringify(comic)).then(() => {
+      LogUtil.info('添加浏览历史')
       let hisIds = AppStorage.get<string[]>(StorageKey.HISTORY)
-      if (hisIds && hisIds.indexOf(comic._id) < 0) {
-        hisIds.push(comic._id)
+      if (hisIds) {
+        if (hisIds.indexOf(comic._id) < 0) {
+          hisIds.push(comic._id)
+        } else {
+          hisIds.splice(0, 0, comic._id)
+        }
       } else {
         hisIds = [comic._id]
       }
       AppStorage.setOrCreate<string[]>(StorageKey.HISTORY, hisIds)
+    }).catch((err: Error) => {
+      LogUtil.error('添加浏览历史失败：', err.name)
+      LogUtil.error('添加浏览历史失败：', err.message)
+      LogUtil.error('添加浏览历史失败：', err.stack)
     })
   }
 
   public static get(): Promise<ComicDetailInfo[]> {
-    return new Promise<ComicDetailInfo[]>(async (resolve, reject) => {
+    return new Promise<ComicDetailInfo[]>(async (resolve, _) => {
       let hisIds = AppStorage.get<string[]>(StorageKey.HISTORY)
       if (hisIds && hisIds.length !== 0) {
         LogUtil.info('获取浏览历史 size ', hisIds.length.toString())
@@ -67,12 +75,31 @@ export class HistoryUtil {
 
   public static getRead(comicId: string): Promise<number> {
     return new Promise<number>(async (resolve, _) => {
-      resolve(await HistoryUtil.readHistoryStore.get(comicId) as number)
+      let res = await HistoryUtil.readHistoryStore.get(comicId) as string
+      LogUtil.info(`查询到阅读历史：`, comicId, ' ', res)
+      resolve(Number.parseInt(res.split(',')[0]))
     })
   }
 
-  public static setRead(comicId: string, order: number) {
-    HistoryUtil.readHistoryStore.put(comicId, order)
+  public static getReadIndex(comicId: string, order: number): Promise<number> {
+    return new Promise<number>(async (resolve, _) => {
+      let res = await HistoryUtil.readHistoryStore.get(comicId) as string
+      LogUtil.info(`查询到阅读历史：`, comicId, ' ', res)
+      let hisOrder = Number.parseInt(res.split(',')[0])
+      if (order === hisOrder) {
+        resolve(Number.parseInt(res.split(',')[1]))
+      } else {
+        resolve(0)
+      }
+    })
+  }
+
+  public static setRead(comicId: string, order: number, index: number = 0) {
+    HistoryUtil.readHistoryStore.put(comicId, `${order},${index}`).then(() => {
+      LogUtil.info(`记录阅读历史成功：${comicId} - ${order} - ${index}`)
+    }).catch((err: Error) => {
+      LogUtil.error(`记录阅读历史失败：${comicId} - ${order} - ${index}`)
+    })
   }
 
   public static clear() {

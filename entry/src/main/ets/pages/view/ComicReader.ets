@@ -42,15 +42,14 @@ export default struct ComicReader {
   @State positionX: number = 0;
   @State positionY: number = 0;
   private scroll: Scroller = new Scroller()
-  private scrollIndexStart: number = 1
-  private scrollIndexEnd: number = 1
   private inPan: boolean = false
+  private canSaveHistory = false
 
   build() {
     NavDestination() {
       Stack() {
         List({ scroller: this.scroll }) {
-          ForEach(this.images, (img: string, index: number) => {
+          ForEach(this.images, (img: string) => {
             ImageKnifeComponent({
               imageKnifeOption: {
                 loadSrc: img,
@@ -75,9 +74,10 @@ export default struct ComicReader {
         .scale({ x: this.scaleValue, y: this.scaleValue, z: 1 })
         .offset({ x: this.offsetX, y: this.offsetY })
         .onScrollIndex((start: number, end: number) => {
-          this.scrollIndexStart = start
-          this.scrollIndexEnd = end
           LogUtil.info(`currentIndex: ${start} - ${end}`)
+          if (this.canSaveHistory) {
+            HistoryUtil.setRead(this.chapter.comicId, this.chapter.order, start)
+          }
           this.isEnd = end + 5 >= this.images.length
           if (this.isEnd && this.page < this.maxPage) {
             LogUtil.info('onReachEnd到底辣！！！要加载更多')
@@ -136,7 +136,7 @@ export default struct ComicReader {
               const maxY = containerBottom - this.windowHeight + (scaledHeight - this.windowHeight) / 2;
               // 更新偏移量，并限制在边界内
               const newOffsetX = this.positionX + event.offsetX * 5;
-              const newOffsetY = this.positionY + event.offsetY * 5;
+              const newOffsetY = this.positionY + event.offsetY * 3;
 
               this.offsetX = Math.min(Math.max(newOffsetX, minX), maxX);
               this.offsetY = Math.min(Math.max(newOffsetY, minY), maxY);
@@ -162,14 +162,20 @@ export default struct ComicReader {
             if (x < this.windowWidth * 0.34 || y < this.windowHeight * 0.3) {
               LogUtil.info('点击上一页')
               animateTo({ duration: 500 }, () => {
-                // this.scroll.scrollPage({ next: false })
-                this.scroll.scrollToIndex(this.scrollIndexStart, true)
+                this.scroll.scrollTo({
+                  xOffset: 0,
+                  yOffset: this.scroll.currentOffset().yOffset - this.windowHeight + 300,
+                  animation: true
+                })
               })
             } else if (x > this.windowWidth * 0.66 || y > this.windowHeight * 0.7) {
               LogUtil.info('点击下一页')
               animateTo({ duration: 500 }, () => {
-                // this.scroll.scrollPage({ next: true })
-                this.scroll.scrollToIndex(this.scrollIndexEnd, true)
+                this.scroll.scrollTo({
+                  xOffset: 0,
+                  yOffset: this.scroll.currentOffset().yOffset + this.windowHeight - 300,
+                  animation: true
+                })
               })
             } else {
               LogUtil.info('点击中间')
@@ -415,13 +421,17 @@ export default struct ComicReader {
   }
 
   load() {
-    HistoryUtil.get()
     chapter(this.chapter.comicId, this.chapter.order, this.page).then(res => {
       animateTo({ duration: 200 }, () => {
         this.title = res.ep.title
         this.maxPage = res.pages.pages
         res.pages.docs.forEach((c, i) => {
           this.images.push(`${this.imageApi}${c.media.path}`)
+        })
+        HistoryUtil.getReadIndex(this.chapter.comicId, this.chapter.order).then(idx => {
+          LogUtil.info('获取阅读记录成功：', idx.toString())
+          this.scroll.scrollToIndex(idx, true)
+          this.canSaveHistory = true
         })
       })
     })
@@ -452,7 +462,6 @@ export default struct ComicReader {
   goToEp(order: number) {
     this.disappear = this.chapter.order < order ? TransitionEffect.move(TransitionEdge.START) :
     TransitionEffect.move(TransitionEdge.END)
-    HistoryUtil.setRead(this.chapter.comicId, order)
     animateTo({ duration: 500 }, () => {
       this.scroll.scrollToIndex(0, true)
       this.chapter.order = order

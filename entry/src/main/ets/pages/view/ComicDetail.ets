@@ -459,7 +459,6 @@ export default struct ComicDetail {
   goToReader(chapter: number) {
     if (this.detail) {
       HistoryUtil.add(this.detail)
-      HistoryUtil.setRead(this.detail._id, chapter)
       this.pageStack.pushPathByName(
         'ComicReader',
         { comicId: this.detail._id, order: chapter } as ComicChapterInterface
