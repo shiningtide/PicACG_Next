@@ -41,7 +41,7 @@ export interface EpsResponse {
 }
 
 export interface RandomResponse {
-  comic: ComicDetailInfo[]
+  comics: ComicDetailInfo[]
 }
 
 export interface KeywordResponse {
@@ -109,11 +109,16 @@ export const comics =
         s,
         c,
       })
-    } else {
+    } else if (ca) {
       return HttpUtil.get('/comics', {
         page,
         s,
         ca
+      })
+    } else {
+      return HttpUtil.get('/comics', {
+        page,
+        s,
       })
     }
   }
@@ -133,7 +138,7 @@ export const search = (page: number = 1, s: SortType = SortType.Newest, keyword?
 
 /**随机本子*/
 export const random = (): Promise<RandomResponse> => {
-  return HttpUtil.get('/comic/random')
+  return HttpUtil.get('/comics/random')
 }
 
 /**大家都在搜*/

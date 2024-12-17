@@ -62,13 +62,13 @@ const LocalCategories: LocalCategory[] = [
   {
     title: '最近更新',
     img: $r('app.media.cat_latest'),
-    router: 'ComicList',
+    router: 'ComicListView',
     param: { type: SearchType.Category }
   },
   {
     title: '隨機本子',
     img: $r('app.media.cat_random'),
-    router: 'ComicList',
+    router: 'ComicListView',
     param: { type: SearchType.Random }
   }
 ]

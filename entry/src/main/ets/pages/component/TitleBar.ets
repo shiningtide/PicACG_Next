@@ -193,7 +193,7 @@ export struct TitleBar {
   @Prop centerType: string =
     this.centerType === undefined ? this.globalCenterType : this.centerType; // 居中视图类型：无|文字|按钮|自定义视图，默认文字视图
   @Prop centerWidth: Length = -1; // 居中宽度，不设置则自适应内容
-  @Prop centerText: ResourceStr = 'Center'; // 居中文字leftType= text 有效
+  @Prop centerText: ResourceStr = ''; // 居中文字leftType= text 有效
   @Prop centerTextColor: ResourceColor =
     this.centerTextColor === undefined ? this.globalCenterTextColor : this.centerTextColor; // 居中文字颜色
   @Prop centerTextSize: Length =

@@ -61,11 +61,11 @@ export default struct ComicListView {
             random().then(res => {
               resolve({
                 comics: {
-                  docs: res.comic,
+                  docs: res.comics,
                   page: 1,
                   pages: 1,
-                  total: res.comic.length,
-                  limit: res.comic.length,
+                  total: res.comics.length,
+                  limit: res.comics.length,
                 }
               })
             }).catch((err: Error) => {
