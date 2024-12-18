@@ -74,8 +74,9 @@ export default struct ComicDetail {
 
               Row() {
                 Text(`作者：${this.formatString(this.detail?.author)}`)
-                  .fontColor($r('app.color.custom_pink'))
                   .width('100%')
+                  .fontSize(14)
+                  .fontColor($r('app.color.custom_pink'))
                   .maxLines(1)
                   .textOverflow({ overflow: TextOverflow.Ellipsis })
                   .onClick(() => {
@@ -92,8 +93,9 @@ export default struct ComicDetail {
 
               Row() {
                 Text(`汉化组：${this.formatString(this.detail?.chineseTeam)}`)
-                  .fontColor($r('app.color.custom_pink'))
                   .width('100%')
+                  .fontSize(14)
+                  .fontColor($r('app.color.custom_pink'))
                   .maxLines(1)
                   .textOverflow({ overflow: TextOverflow.Ellipsis })
                   .onClick(() => {
@@ -110,8 +112,9 @@ export default struct ComicDetail {
 
               Row() {
                 Text(`分类：${this.detail?.categories.join(',')}`)
-                  .fontColor(Color.Gray)
                   .width('100%')
+                  .fontSize(14)
+                  .fontColor(Color.Gray)
                   .maxLines(1)
                   .textOverflow({ overflow: TextOverflow.Ellipsis })
               }
