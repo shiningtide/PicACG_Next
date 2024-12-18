@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from '@ohos/axios'
 import { MD5, RandomUtil } from '@pura/harmony-utils'
 import { HttpUtil } from '../utils/Http'
 import { PicaPage } from '../common/Model'
-import { Category, Chapter, ComicDetailInfo, ComicEp, ComicSimpleInfo, SortType } from './models'
+import { Category, Chapter, ComicDetailInfo, ComicEp, ComicSimpleInfo, SortType, TimeType, User } from './models'
 import { ComicActionResponse, CommentResponse } from './profile'
 
 export interface CollectionResponse {
@@ -14,7 +14,7 @@ export interface Collection {
   comics: ComicSimpleInfo[]
 }
 
-export interface RecommendResponse {
+export interface CommonComicsResponse {
   comics: ComicDetailInfo[]
 }
 
@@ -53,6 +53,10 @@ export interface ChapterResponse {
   pages: PicaPage<Chapter>
 }
 
+export interface UserResponse {
+  users: User[]
+}
+
 /**另一个推荐接口: 其他人还在看(不需要认证)*/
 export const otherRecommend = (_id?: string) => {
   if (!_id) {
@@ -75,7 +79,7 @@ export const collections = (): Promise<CollectionResponse> => {
 }
 
 /**相关推荐*/
-export const recommendation = (comicId: string): Promise<RecommendResponse> => {
+export const recommendation = (comicId: string): Promise<CommonComicsResponse> => {
   return HttpUtil.get(`/comics/${comicId}/recommendation`)
 }
 
@@ -94,33 +98,28 @@ export const categories = (): Promise<CategoryResponse> => {
   return HttpUtil.get('categories')
 }
 
-/**
- * 漫画分页列表（c和ca二选一，同时传入以c为优先）
- * @param page 页码
- * @param s 排序
- * @param c 分类名称
- * @param ca 上传者id
- * */
-export const comics =
-  (page: number = 1, s: SortType = SortType.Newest, c?: string, ca?: string): Promise<ComicResponse> => {
-    if (c) {
-      return HttpUtil.get('/comics', {
-        page,
-        s,
-        c,
-      })
-    } else if (ca) {
-      return HttpUtil.get('/comics', {
-        page,
-        s,
-        ca
-      })
-    } else {
-      return HttpUtil.get('/comics', {
-        page,
-        s,
-      })
-    }
+/**根据分类查询漫画分页*/
+export const comicsByCategory =
+  (page: number = 1, s: SortType = SortType.Newest, c: string): Promise<ComicResponse> => {
+    return HttpUtil.get('/comics', { page, s, c: encodeURI(c) })
+  }
+
+/**根据上传者查询漫画分页*/
+export const comicsByUploader =
+  (page: number = 1, s: SortType = SortType.Newest, ca: string): Promise<ComicResponse> => {
+    return HttpUtil.get('/comics', { page, s, ca })
+  }
+
+/**根据作者查询漫画分页*/
+export const comicsByAuthor =
+  (page: number = 1, s: SortType = SortType.Newest, a: string): Promise<ComicResponse> => {
+    return HttpUtil.get('/comics', { page, s, a: encodeURI(a) })
+  }
+
+/**根据汉化组查询漫画分页*/
+export const comicsByTeam =
+  (page: number = 1, s: SortType = SortType.Newest, ct: string): Promise<ComicResponse> => {
+    return HttpUtil.get('/comics', { page, s, ct: encodeURI(ct) })
   }
 
 /**关键字查询分页列表*/
@@ -164,4 +163,14 @@ export const commentsChildren = (page: number = 1, commentId: string): Promise<C
 /**漫画章节内容*/
 export const chapter = (comicId: string, order: number = 1, page: number = 1): Promise<ChapterResponse> => {
   return HttpUtil.get(`/comics/${comicId}/order/${order}/pages`, { page })
+}
+
+/**排行榜*/
+export const leaderboard = (tt: TimeType, ct: string = 'VC'): Promise<CommonComicsResponse> => {
+  return HttpUtil.get('/comics/leaderboard', { tt, ct })
+}
+
+/**骑士排行榜*/
+export const knightLeaderboard = (): Promise<UserResponse> => {
+  return HttpUtil.get('/comics/knight-leaderboard')
 }

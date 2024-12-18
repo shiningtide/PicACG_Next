@@ -1,5 +1,13 @@
 import { LogUtil, ObjectUtil } from '@pura/harmony-utils'
-import { ComicResponse, comics, random, search } from '../../api/comic'
+import {
+  ComicResponse,
+  comicsByAuthor,
+  comicsByCategory,
+  comicsByTeam,
+  comicsByUploader,
+  random,
+  search
+} from '../../api/comic'
 import { SortType } from '../../api/models'
 import { SortItems } from '../../common/Config'
 import { PreferenceItem } from '../../utils/Preference'
@@ -48,9 +56,36 @@ export default struct ComicListView {
       LogUtil.info('分类查询：', this.searchParam.key)
       this.attr = {
         type: 'remote',
-        api: comics as (page?: number, s?: SortType, p3?: string, p4?: string | string[]) => Promise<ComicResponse>,
+        api: comicsByCategory as (page?: number, s?: SortType, p3?: string) => Promise<ComicResponse>,
         sort: this.sort,
-        param1: this.searchParam.key ? encodeURI(this.searchParam.key) : '',
+        param1: this.searchParam.key,
+      }
+    } else if (this.searchParam?.type === SearchType.Uploader) {
+      // Uploader查询
+      LogUtil.info('Uploader查询：', this.searchParam.key)
+      this.attr = {
+        type: 'remote',
+        api: comicsByUploader as (page?: number, s?: SortType, p3?: string) => Promise<ComicResponse>,
+        sort: this.sort,
+        param1: this.searchParam.key,
+      }
+    } else if (this.searchParam?.type === SearchType.Author) {
+      // Author查询
+      LogUtil.info('Author查询：', this.searchParam.key)
+      this.attr = {
+        type: 'remote',
+        api: comicsByAuthor as (page?: number, s?: SortType, p3?: string) => Promise<ComicResponse>,
+        sort: this.sort,
+        param1: this.searchParam.key,
+      }
+    } else if (this.searchParam?.type === SearchType.Team) {
+      // Team查询
+      LogUtil.info('Team查询：', this.searchParam.key)
+      this.attr = {
+        type: 'remote',
+        api: comicsByTeam as (page?: number, s?: SortType, p3?: string) => Promise<ComicResponse>,
+        sort: this.sort,
+        param1: this.searchParam.key,
       }
     } else {
       // 随机查询
@@ -265,5 +300,8 @@ export interface ComicListOptions {
 export enum SearchType {
   Random,
   Category,
-  Custom
+  Custom,
+  Uploader,
+  Author,
+  Team
 }

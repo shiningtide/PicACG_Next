@@ -51,7 +51,7 @@ const LocalCategories: LocalCategory[] = [
   {
     title: '排行榜',
     img: $r('app.media.cat_leaderboard'),
-    router: 'Rank'
+    router: 'Leaderboard'
   },
   {
     title: '哔咔留言板',

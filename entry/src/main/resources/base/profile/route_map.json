@@ -19,6 +19,11 @@
       "name": "ComicSearch",
       "pageSourceFile": "src/main/ets/pages/view/ComicSearch.ets",
       "buildFunction": "ComicSearchBuilder"
+    },
+    {
+      "name": "Leaderboard",
+      "pageSourceFile": "src/main/ets/pages/view/Leaderboard.ets",
+      "buildFunction": "LeaderboardBuilder"
     }
   ]
 }

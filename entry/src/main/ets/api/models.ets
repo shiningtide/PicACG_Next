@@ -63,6 +63,7 @@ export interface User extends Creator {
   created_at: string
   isPunched: boolean
   character: string
+  comicsUploaded: number
 }
 
 export interface Comment {
@@ -106,4 +107,10 @@ export enum SortType {
   Oldest = 'da',
   Likest = 'ld',
   Favorite = 'vd'
+}
+
+export enum TimeType {
+  Day30 = 'D30',
+  Day7 = 'D7',
+  Hour24 = 'H24',
 }

@@ -169,8 +169,8 @@ export default struct ComicList {
         .divider({
           strokeWidth: 1,
           color: $r('app.color.custom_gray'),
-          startMargin: 20,
-          endMargin: 20
+          startMargin: 10,
+          endMargin: 10
         })
         .scrollBar(BarState.Off)
         .onScrollIndex((_: number, end: number) => {

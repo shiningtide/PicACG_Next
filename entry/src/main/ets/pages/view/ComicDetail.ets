@@ -77,6 +77,15 @@ export default struct ComicDetail {
                   .width('100%')
                   .maxLines(1)
                   .textOverflow({ overflow: TextOverflow.Ellipsis })
+                  .onClick(() => {
+                    this.pageStack.pushPath({
+                      name: 'ComicListView',
+                      param: {
+                        type: SearchType.Author,
+                        key: this.detail?.author
+                      } as ComicListOptions
+                    })
+                  })
               }
               .margin({ top: 5 })
 
@@ -86,6 +95,15 @@ export default struct ComicDetail {
                   .width('100%')
                   .maxLines(1)
                   .textOverflow({ overflow: TextOverflow.Ellipsis })
+                  .onClick(() => {
+                    this.pageStack.pushPath({
+                      name: 'ComicListView',
+                      param: {
+                        type: SearchType.Team,
+                        key: this.detail?.chineseTeam
+                      } as ComicListOptions
+                    })
+                  })
               }
               .margin({ top: 5 })
 
@@ -285,7 +303,6 @@ export default struct ComicDetail {
           Row() {
             // 头像
             Column() {
-              // 头像
               ImageKnifeComponent({
                 imageKnifeOption: {
                   loadSrc: this.imageApi + this.detail?._creator.avatar?.path,
@@ -302,6 +319,16 @@ export default struct ComicDetail {
             .width(48)
             .height(48)
             .margin({ right: 15 })
+            .onClick(() => {
+              this.pageStack.pushPath({
+                name: 'ComicListView',
+                param: {
+                  type: SearchType.Uploader,
+                  key: this.detail?._creator._id,
+                  title: this.detail?._creator.name
+                } as ComicListOptions
+              })
+            })
 
             // 昵称 + 更新日期
             Column() {
