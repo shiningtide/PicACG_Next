@@ -1,5 +1,5 @@
 import { SortType } from '../api/models'
-import { SearchType } from '../pages/view/ComicListView'
+import { SearchType } from '../pages/view/Comics'
 import { PreferenceItem } from '../utils/Preference'
 
 const Host = 'picaapi.picacomic.com'
@@ -61,13 +61,13 @@ const LocalCategories: LocalCategory[] = [
   {
     title: '最近更新',
     img: $r('app.media.cat_latest'),
-    router: 'ComicListView',
+    router: 'Comics',
     param: { type: SearchType.Category, title: '最近更新' }
   },
   {
     title: '随机本子',
     img: $r('app.media.cat_random'),
-    router: 'ComicListView',
+    router: 'Comics',
     param: { type: SearchType.Random, title: '随机本子' }
   }
 ]

@@ -5,7 +5,7 @@ import { Category } from '../../api/models'
 import { CategoryFilter, LocalCategories, LocalCategory } from '../../common/Config'
 import { StorageKey } from '../../common/Consts'
 import { PreferenceStorageKey } from '../../utils/Preference'
-import { SearchType } from './ComicListView'
+import { SearchType } from './Comics'
 
 @Component
 export default struct Categories {
@@ -55,7 +55,7 @@ export default struct Categories {
         // 远程分类
         ForEach(this.remoteCategories, (item: Category) => {
           ListItem({ style: ListItemStyle.CARD }) {
-            this.CategoryCard(`${this.imageApi}${item.thumb.path}`, item.title, 'ComicListView',
+            this.CategoryCard(`${this.imageApi}${item.thumb.path}`, item.title, 'Comics',
               { type: SearchType.Category, key: item.title })
           }
           .width(115)

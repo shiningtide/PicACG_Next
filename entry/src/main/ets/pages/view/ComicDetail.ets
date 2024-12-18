@@ -6,7 +6,7 @@ import { PreferenceStorageKey } from '../../utils/Preference'
 import { ComicCardInterface } from '../component/ComicCard'
 import { BackType, TitleBar, TitleType } from '../component/TitleBar'
 import { Chip, ChipSize, LengthUnit, promptAction } from '@kit.ArkUI'
-import { ComicListOptions, SearchType } from './ComicListView'
+import { ComicListOptions, SearchType } from './Comics'
 import ComicCardScroll from '../component/ComicCardScroll'
 import CommentList from '../component/CommentList'
 import { favouriteAction, likeAction } from '../../api/profile'
@@ -80,7 +80,7 @@ export default struct ComicDetail {
                   .textOverflow({ overflow: TextOverflow.Ellipsis })
                   .onClick(() => {
                     this.pageStack.pushPath({
-                      name: 'ComicListView',
+                      name: 'Comics',
                       param: {
                         type: SearchType.Author,
                         key: this.detail?.author
@@ -98,7 +98,7 @@ export default struct ComicDetail {
                   .textOverflow({ overflow: TextOverflow.Ellipsis })
                   .onClick(() => {
                     this.pageStack.pushPath({
-                      name: 'ComicListView',
+                      name: 'Comics',
                       param: {
                         type: SearchType.Team,
                         key: this.detail?.chineseTeam
@@ -184,7 +184,7 @@ export default struct ComicDetail {
                 size: ChipSize.SMALL,
                 onClicked: () => {
                   this.pageStack.pushPathByName(
-                    'ComicListView',
+                    'Comics',
                     { type: SearchType.Custom, key: key } as ComicListOptions,
                   )
                 }
@@ -322,7 +322,7 @@ export default struct ComicDetail {
             .margin({ right: 15 })
             .onClick(() => {
               this.pageStack.pushPath({
-                name: 'ComicListView',
+                name: 'Comics',
                 param: {
                   type: SearchType.Uploader,
                   key: this.detail?._creator._id,

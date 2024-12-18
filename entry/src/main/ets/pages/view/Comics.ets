@@ -18,12 +18,12 @@ import { StorageKey } from '../../common/Consts'
 import HalfModal from '../component/HalfModal'
 
 @Builder
-export function ComicListViewBuilder(name: string, param: Object) {
-  ComicListView()
+export function ComicsBuilder(name: string, param: Object) {
+  Comics()
 }
 
 @Component
-export default struct ComicListView {
+export default struct Comics {
   @StorageProp('bottomRectHeight') bottomRectHeight: number = 0
   @StorageLink(StorageKey.CATEGORY) category: string[] = []
   @Consume('pageStack') pageStack: NavPathStack

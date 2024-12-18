@@ -1,7 +1,7 @@
 import { LogUtil, RandomUtil } from '@pura/harmony-utils';
 import { StorageKey } from '../../common/Consts';
 import { BackType, TitleBar, TitleType } from '../component/TitleBar';
-import { ComicListOptions, SearchType } from './ComicListView';
+import { ComicListOptions, SearchType } from './Comics';
 import { Chip, ChipSize } from '@ohos.arkui.advanced.Chip';
 import { LengthUnit } from '@kit.ArkUI';
 import { keywords } from '../../api/comic';
@@ -201,6 +201,6 @@ export default struct ComicSearch {
       this.searchHistory.splice(this.searchHistory.indexOf(key), 1)
     }
     this.searchHistory.push(key)
-    this.pageStack.pushPathByName('ComicListView', { type: SearchType.Custom, key: key } as ComicListOptions)
+    this.pageStack.pushPathByName('Comics', { type: SearchType.Custom, key: key } as ComicListOptions)
   }
 }

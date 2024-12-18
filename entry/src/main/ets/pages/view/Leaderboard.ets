@@ -6,7 +6,7 @@ import { SlidingTabsV1 } from '@xqw/sliding-tabs'
 import { SlidingTabControllerV1 } from '@xqw/sliding-tabs/src/main/ets/v1/SlidingTabControllerV1'
 import { ImageKnifeComponent } from '@ohos/imageknife'
 import { PreferenceStorageKey } from '../../utils/Preference'
-import { ComicListOptions, SearchType } from './ComicListView'
+import { ComicListOptions, SearchType } from './Comics'
 
 @Builder
 export function LeaderboardBuilder(name: string, param: Object) {
@@ -171,7 +171,7 @@ export default struct Leaderboard {
                       .height(80)
                       .onClick(() => {
                         this.pageStack.pushPath({
-                          name: 'ComicListView',
+                          name: 'Comics',
                           param: {
                             type: SearchType.Uploader,
                             key: knight._id,
