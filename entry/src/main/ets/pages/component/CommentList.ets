@@ -1,18 +1,23 @@
 import { LogUtil } from '@pura/harmony-utils';
-import { comments, commentsChildren } from '../../api/comic';
+import { comments, commentsChildren, replyComment, sendComment } from '../../api/comic';
 import { Comment } from '../../api/models';
 import { CommentResponse, myComments } from '../../api/profile';
 import CommentListItem from './CommentListItem';
+import { promptAction } from '@kit.ArkUI';
 
 @Component
 export default struct CommentList {
+  @StorageProp('bottomRectHeight') bottomRectHeight: number = 0
   @State comments: Comment[] = []
   @State topComments: Comment[] = []
   @State isRefreshing: boolean = true
   @State isLoading: boolean = false;
   @State isEnd: boolean = false;
   @State maxPage: number = 1
+  @State total: number = 0
   @State page: number = 1
+  @State content: string = ''
+  @State showReply: boolean = false
   @Prop avatar: string | undefined = undefined
   @Prop comicId: string
   @Prop commentId: string
@@ -23,9 +28,11 @@ export default struct CommentList {
     if (this.commentId) {
       LogUtil.info('加载楼中楼', this.comicId)
       api = commentsChildren as (page: number, commentId?: string) => Promise<CommentResponse>
+      this.showReply = true
     } else if (this.comicId) {
       LogUtil.info('加载漫画评论', this.comicId)
       api = comments as (page: number, comicId?: string) => Promise<CommentResponse>
+      this.showReply = true
     } else {
       LogUtil.info('加载我的评论')
       api = myComments
@@ -104,7 +111,7 @@ export default struct CommentList {
             return item._id
           })
 
-          if (this.comments.length === 0 || this.page === this.maxPage) {
+          if (this.comments.length === this.total) {
             ListItem() {
               Row() {
                 Text('没有更多了')
@@ -126,7 +133,6 @@ export default struct CommentList {
         }
         .width('100%')
         .height('100%')
-        .layoutWeight(1)
         .divider({
           strokeWidth: 1,
           color: $r('app.color.custom_gray'),
@@ -146,6 +152,9 @@ export default struct CommentList {
           }
         })
       }
+      .layoutWeight(1)
+      .refreshOffset(64)
+      .pullToRefresh(true)
       .onRefreshing(() => {
         LogUtil.info('刷新！！！！')
         this.page = 1
@@ -153,11 +162,49 @@ export default struct CommentList {
           this.loadComments()
         })
       })
-      .layoutWeight(1)
-      .refreshOffset(64)
-      .pullToRefresh(true)
+
+      if (this.showReply) {
+        Column() {
+          TextInput({
+            text: this.content,
+            placeholder: '发表你的观点吧!',
+          })
+            .width('100%')
+            .height(50)
+            .margin({ top: 10, bottom: 10 })
+            .onChange((value: string) => {
+              this.content = value
+            })
+            .onSubmit(() => {
+              this.doComment()
+            })
+          Button('回复')
+            .width('100%')
+            .height(40)
+            .backgroundColor($r('app.color.custom_pink'))
+            .onClick(() => {
+              this.doComment()
+            })
+        }
+        .width('100%')
+        .transition(TransitionEffect.scale({ x: 0.9, y: 0.9 }))
+      }
     }
     .layoutWeight(1)
     .padding({ left: 10, right: 10 })
+  }
+
+  doComment() {
+    if (this.commentId) {
+      replyComment(this.commentId, this.content).then(() => {
+        this.content = ''
+        promptAction.showToast({ message: '评论成功', });
+      })
+    } else if (this.comicId) {
+      sendComment(this.comicId, this.content).then(() => {
+        this.content = ''
+        promptAction.showToast({ message: '评论成功', });
+      })
+    }
   }
 }

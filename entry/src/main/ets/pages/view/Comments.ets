@@ -27,7 +27,8 @@ export default struct Comments {
           },
         })
         CommentList({ comicId: '5822a6e3ad7ede654696e482' })
-          .margin({ top: 10, bottom: this.bottomRectHeight })
+          .margin({ top: 10 })
+          .layoutWeight(1)
       }
       .height('100%')
       .width('100%')

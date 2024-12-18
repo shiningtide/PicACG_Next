@@ -18,6 +18,7 @@ export default struct ComicList {
   @State isLoading: boolean = false;
   @State isEnd: boolean = false;
   @State maxPage: number = 1
+  @State total: number = 0
   @State page: number = 1
   @Prop @Watch('attrChange') attr: ComicListAttribute
   @Prop canSwipe: boolean = true
@@ -65,6 +66,7 @@ export default struct ComicList {
           LogUtil.debug(`加载第${this.page}页，共${res.comics.docs.length}条`)
           this.page = res.comics.page
           this.maxPage = res.comics.pages
+          this.total = res.comics.total
         })
         .finally(() => {
           animateTo({ duration: 500 }, () => {
@@ -143,7 +145,7 @@ export default struct ComicList {
             return item._id
           })
 
-          if (this.comics.length === 0 || this.page === this.maxPage) {
+          if (this.comics.length === this.total) {
             ListItem() {
               Row() {
                 Text('没有更多了')

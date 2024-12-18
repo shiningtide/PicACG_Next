@@ -1,6 +1,6 @@
 import { ImageKnifeComponent } from '@ohos/imageknife'
 import { DateUtil } from '@pura/harmony-utils'
-import { commentLike } from '../../api/comic'
+import { likeComment } from '../../api/comic'
 import { PreferenceStorageKey } from '../../utils/Preference'
 import { ComicCardInterface } from './ComicCard'
 import { promptAction } from '@kit.ArkUI'
@@ -91,7 +91,7 @@ export default struct CommentListItem {
               .margin({ left: 5 })
           }
           .onClick(() => {
-            commentLike(this._id).then(res => {
+            likeComment(this._id).then(res => {
               if (res.action === 'like') {
                 promptAction.showToast({ message: '喜欢成功', });
                 this.isLike = true
@@ -155,8 +155,8 @@ export default struct CommentListItem {
         },
         options: {
           title: {
-            title: '评论区',
-            subtitle: '发表你的观点吧~',
+            title: '回复',
+            subtitle: this.content,
           },
           height: SheetSize.MEDIUM,
           showClose: false,

@@ -150,14 +150,24 @@ export const comments = (page: number = 1, comicId: string): Promise<CommentResp
   return HttpUtil.get(`/comics/${comicId}/comments`, { page })
 }
 
+/**回复评论*/
+export const sendComment = (comicId: string, content: string): Promise<void> => {
+  return HttpUtil.post(`/comics/${comicId}/comments`, { content })
+}
+
 /**评论点赞*/
-export const commentLike = (commentId: string): Promise<ComicActionResponse> => {
+export const likeComment = (commentId: string): Promise<ComicActionResponse> => {
   return HttpUtil.post(`/comments/${commentId}/like`)
 }
 
-/**漫画楼中楼*/
+/**评论楼中楼*/
 export const commentsChildren = (page: number = 1, commentId: string): Promise<CommentResponse> => {
   return HttpUtil.get(`/comments/${commentId}/childrens`, { page })
+}
+
+/**回复评论*/
+export const replyComment = (commentId: string, content: string): Promise<void> => {
+  return HttpUtil.post(`/comments/${commentId}`, { content })
 }
 
 /**漫画章节内容*/

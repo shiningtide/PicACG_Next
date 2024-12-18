@@ -138,7 +138,6 @@ export default struct Comics {
       .height('100%')
       .width('100%')
       .padding({
-        bottom: this.bottomRectHeight,
         left: 10,
         right: 10
       })
