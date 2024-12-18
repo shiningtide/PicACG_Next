@@ -24,6 +24,11 @@
       "name": "Leaderboard",
       "pageSourceFile": "src/main/ets/pages/view/Leaderboard.ets",
       "buildFunction": "LeaderboardBuilder"
+    },
+    {
+      "name": "Comments",
+      "pageSourceFile": "src/main/ets/pages/view/Comments.ets",
+      "buildFunction": "CommentsBuilder"
     }
   ]
 }
