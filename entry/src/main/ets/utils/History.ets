@@ -2,7 +2,7 @@ import { AppUtil, LogUtil } from '@pura/harmony-utils';
 import { ComicDetailInfo } from '../api/models';
 import { JSON } from '@kit.ArkTS';
 import { StorageKey } from '../common/Consts';
-import { distributedKVStore } from '@kit.ArkData';
+import distributedKVStore from '@ohos.data.distributedKVStore';
 
 export class HistoryUtil {
   private static defaultOptions: distributedKVStore.Options = {
