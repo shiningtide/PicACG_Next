@@ -42,6 +42,7 @@ export default struct ComicReader {
   @State offsetY: number = 0;
   @State positionX: number = 0;
   @State positionY: number = 0;
+  @State currentImageIndex: number = 0
   private scroll: Scroller = new Scroller()
   private inPan: boolean = false
   private canSaveHistory = false
@@ -76,6 +77,7 @@ export default struct ComicReader {
         .offset({ x: this.offsetX, y: this.offsetY })
         .onScrollIndex((start: number, end: number) => {
           LogUtil.info(`currentIndex: ${start} - ${end}`)
+          this.currentImageIndex = start
           if (this.canSaveHistory) {
             HistoryUtil.setRead(this.chapter.comicId, this.chapter.order, start)
           }
@@ -209,16 +211,38 @@ export default struct ComicReader {
             })
               .transition(TransitionEffect.move(TransitionEdge.TOP))
 
-            Column()
-              .width('100%')
-              .height('100%')
-              .layoutWeight(1)
-              .onClick(() => {
-                animateTo({ duration: 300 }, () => {
-                  this.showToolbar = false
-                  this.showSystemBar(false)
+            Row() {
+              Column()
+                .width('90%')
+                .height('100%')
+                .onClick(() => {
+                  animateTo({ duration: 300 }, () => {
+                    this.showToolbar = false
+                    this.showSystemBar(false)
+                  })
                 })
-              })
+              Column() {
+                Slider({
+                  value: $$this.currentImageIndex,
+                  max: this.images.length - 1,
+                  style: SliderStyle.OutSet,
+                  direction: Axis.Vertical
+                })
+                  .blockColor($r('app.color.custom_pink'))
+                  .trackColor($r('app.color.common_button_background_light'))
+                  .selectedColor($r('app.color.common_button_background_weight'))
+                  .showTips(true, `${this.currentImageIndex}`)
+                  .onChange((value: number) => {
+                    this.currentImageIndex = value
+                    this.scroll.scrollToIndex(value, true)
+                  })
+              }
+              .width('10%')
+              .height('100%')
+            }
+            .width('100%')
+            .height('100%')
+            .layoutWeight(1)
 
             Row() {
               Button() {
