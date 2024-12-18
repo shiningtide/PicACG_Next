@@ -5,9 +5,11 @@ import { PreferenceStorageKey } from '../../utils/Preference'
 import { ComicCardInterface } from './ComicCard'
 import { promptAction } from '@kit.ArkUI'
 import CommentList from './CommentList'
+import HalfModal from './HalfModal'
 
 @Component
 export default struct CommentListItem {
+  @StorageProp('bottomRectHeight') bottomRectHeight: number = 0
   @StorageProp(PreferenceStorageKey.IMAGE_API) imageApi: string = ''
   @Consume('pageStack') pageStack: NavPathStack;
   @Prop _id: string
@@ -21,9 +23,7 @@ export default struct CommentListItem {
   @Prop avatar: string
   @Prop name: string = ''
   @Prop slogan: string
-  @State showChildren: boolean = false
-  @State currentChildrenPage: number = 1
-  @State maxChildrenPage: number = 1
+  @State showInComments: boolean = false
 
   build() {
     Row() {
@@ -116,9 +116,9 @@ export default struct CommentListItem {
             .margin({ left: 15 })
             .onClick(() => {
               if (this.commentsCount > 0) {
-                this.showChildren = !this.showChildren
+                this.showInComments = true
               } else {
-                this.showChildren = false
+                this.showInComments = false
               }
             })
           }
@@ -142,26 +142,41 @@ export default struct CommentListItem {
           }
           .width('100%')
         }
-
-        // 楼中楼
-        if (this.showChildren) {
-          Column() {
-            CommentList({ commentId: this._id })
-              .constraintSize({ minHeight: 100, maxHeight: '60%' })
-          }
-          .width('100%')
-          .backgroundColor('#f8f9fa')
-          .layoutWeight(1)
-        }
       }
       .width('100%')
       .constraintSize({ minHeight: 100, maxHeight: '100%' })
       .padding({ bottom: 10 })
       .layoutWeight(1)
+
+      HalfModal({
+        show: this.showInComments,
+        view: () => {
+          this.inComments()
+        },
+        options: {
+          title: {
+            title: '评论区',
+            subtitle: '发表你的观点吧~',
+          },
+          height: SheetSize.MEDIUM,
+          showClose: false,
+          dragBar: false,
+          blurStyle: BlurStyle.COMPONENT_ULTRA_THIN,
+          onDisappear: () => {
+            this.showInComments = false
+          },
+        }
+      })
     }
     .width('100%')
     .constraintSize({ minHeight: 100, maxHeight: '100%' })
     .padding({ top: 10 })
     .layoutWeight(1)
+  }
+
+  @Builder
+  inComments() {
+    CommentList({ commentId: this._id })
+      .margin({ bottom: this.bottomRectHeight })
   }
 }
