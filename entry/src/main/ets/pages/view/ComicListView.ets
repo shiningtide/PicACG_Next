@@ -15,6 +15,7 @@ import ComicList, { ComicListAttribute } from '../component/ComicList'
 import { BackType, TitleBar, TitleType } from '../component/TitleBar'
 import { SymbolGlyphModifier } from '@kit.ArkUI'
 import { StorageKey } from '../../common/Consts'
+import HalfModal from '../component/HalfModal'
 
 @Builder
 export function ComicListViewBuilder(name: string, param: Object) {
@@ -142,11 +143,12 @@ export default struct ComicListView {
         right: 10
       })
 
-      Flex()
-        .width(0)
-        .height(0)
-        .borderRadius({ topRight: 30, bottomRight: 30 })
-        .bindSheet(this.showCategory, this.categoryFilter(), {
+      HalfModal({
+        show: this.showCategory,
+        view: () => {
+          this.categoryFilter()
+        },
+        options: {
           title: {
             title: '限定分类',
           },
@@ -157,7 +159,8 @@ export default struct ComicListView {
           onDisappear: () => {
             this.showCategory = false
           },
-        })
+        }
+      })
     }
     .mode(NavDestinationMode.STANDARD)
     .hideTitleBar(true)

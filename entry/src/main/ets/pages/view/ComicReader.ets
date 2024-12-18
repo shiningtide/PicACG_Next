@@ -7,6 +7,7 @@ import { PreferenceItem, PreferenceManager, PreferenceStorageKey } from '../../u
 import { BackType, TitleBar, TitleType } from '../component/TitleBar'
 import { ImageQuality } from '../../common/Config'
 import { HistoryUtil } from '../../utils/History'
+import HalfModal from '../component/HalfModal'
 
 @Builder
 export function ComicReaderBuilder(name: string, param: Object) {
@@ -297,11 +298,12 @@ export default struct ComicReader {
       .height('100%')
       .backgroundColor(Color.Black)
 
-      Flex()
-        .width(0)
-        .height(0)
-        .borderRadius({ topRight: 30, bottomRight: 30 })
-        .bindSheet(this.showEps, this.epsBuilder(), {
+      HalfModal({
+        show: this.showEps,
+        view: () => {
+          this.epsBuilder()
+        },
+        options: {
           title: {
             title: '目录',
           },
@@ -314,8 +316,8 @@ export default struct ComicReader {
               this.showEps = false
             })
           },
-        })
-        .layoutWeight(1)
+        }
+      })
     }
     .mode(NavDestinationMode.STANDARD)
     .hideTitleBar(true)

@@ -93,8 +93,6 @@ export default struct CommentList {
                 comicTitle: comment._comic.title,
                 comicId: comment._comic._id,
                 avatar: `${this.avatar ? this.avatar : comment._user?.avatar?.path}`
-                // avatar: `${comment._user.avatar.path}`
-                // avatar: `${this.avatar}`
               })
             }
             .layoutWeight(1)

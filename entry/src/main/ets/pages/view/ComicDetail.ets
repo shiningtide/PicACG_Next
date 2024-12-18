@@ -12,6 +12,7 @@ import CommentList from '../component/CommentList'
 import { favouriteAction, likeAction } from '../../api/profile'
 import { ComicChapterInterface } from './ComicReader'
 import { HistoryUtil } from '../../utils/History'
+import HalfModal from '../component/HalfModal'
 
 @Builder
 export function ComicDetailBuilder(name: string, param: Object) {
@@ -409,23 +410,25 @@ export default struct ComicDetail {
       .layoutWeight(1)
       .padding({ left: 10, right: 10, bottom: this.bottomRectHeight })
 
-      Flex()
-        .width(0)
-        .height(0)
-        .borderRadius({ topRight: 30, bottomRight: 30 })
-        .bindSheet(this.showComments, this.comments(), {
+      HalfModal({
+        show: this.showComments,
+        view: () => {
+          this.comments()
+        },
+        options: {
           title: {
             title: '评论区',
             subtitle: '发表你的观点吧~',
           },
-          height: SheetSize.LARGE,
+          height: SheetSize.MEDIUM,
           showClose: false,
           dragBar: false,
           blurStyle: BlurStyle.COMPONENT_ULTRA_THIN,
           onDisappear: () => {
             this.showComments = false
           },
-        })
+        }
+      })
     }
     .mode(NavDestinationMode.STANDARD)
     .hideTitleBar(true)

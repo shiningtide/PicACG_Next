@@ -7,6 +7,7 @@ import { promptAction, router } from '@kit.ArkUI'
 import { DialogAction } from '@pura/harmony-utils/src/main/ets/entity/constraint'
 import { HistoryUtil } from '../utils/History'
 import SettingsItem from './component/SettingsItem'
+import HalfModal from './component/HalfModal'
 
 @Entry
 @Component
@@ -106,11 +107,12 @@ struct Settings {
         ]
       })
 
-      Flex()
-        .width(0)
-        .height(0)
-        .borderRadius({ topRight: 30, bottomRight: 30 })
-        .bindSheet(this.showApiChannel, this.ApiChannel(), {
+      HalfModal({
+        show: this.showApiChannel,
+        view: () => {
+          this.ApiChannel()
+        },
+        options: {
           title: {
             title: '设置',
             subtitle: '接口线路'
@@ -122,12 +124,15 @@ struct Settings {
           onDisappear: () => {
             this.showApiChannel = false
           },
-        })
-      Flex()
-        .width(0)
-        .height(0)
-        .borderRadius({ topRight: 30, bottomRight: 30 })
-        .bindSheet(this.showImageChannel, this.ImageChannel(), {
+        }
+      })
+
+      HalfModal({
+        show: this.showImageChannel,
+        view: () => {
+          this.ImageChannel()
+        },
+        options: {
           title: {
             title: '设置',
             subtitle: '图源线路'
@@ -139,7 +144,8 @@ struct Settings {
           onDisappear: () => {
             this.showImageChannel = false
           },
-        })
+        }
+      })
     }
     .width('100%')
     .height('100%')
