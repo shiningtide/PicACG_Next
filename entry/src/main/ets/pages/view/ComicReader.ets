@@ -457,6 +457,10 @@ export default struct ComicReader {
         HistoryUtil.getReadIndex(this.chapter.comicId, this.chapter.order).then(idx => {
           LogUtil.info('获取阅读记录成功：', idx.toString())
           this.scroll.scrollToIndex(idx, true)
+        }).catch(() => {
+          HistoryUtil.setRead(this.chapter.comicId, this.chapter.order, 0)
+        }).finally(() => {
+          LogUtil.info('获取阅读记录结束')
           this.canSaveHistory = true
         })
       })

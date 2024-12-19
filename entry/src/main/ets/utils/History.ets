@@ -75,31 +75,38 @@ export class HistoryUtil {
   }
 
   public static getRead(comicId: string): Promise<number> {
-    return new Promise<number>(async (resolve, _) => {
-      let res = await HistoryUtil.readHistoryStore.get(comicId) as string
-      LogUtil.info(`查询到阅读历史：`, comicId, ' ', res)
-      resolve(Number.parseInt(res.split(',')[0]))
+    return new Promise<number>((resolve, reject) => {
+      HistoryUtil.readHistoryStore.get(comicId).then(r => {
+        let res = r as string
+        LogUtil.info(`查询到阅读章节：`, comicId, ' ', res)
+        resolve(Number.parseInt(res.split(',')[0]))
+      }).catch((err: Error) => {
+        reject(err)
+      })
     })
   }
 
   public static getReadIndex(comicId: string, order: number): Promise<number> {
-    return new Promise<number>(async (resolve, _) => {
-      let res = await HistoryUtil.readHistoryStore.get(comicId) as string
-      LogUtil.info(`查询到阅读历史：`, comicId, ' ', res)
-      let hisOrder = Number.parseInt(res.split(',')[0])
-      if (order === hisOrder) {
-        resolve(Number.parseInt(res.split(',')[1]))
-      } else {
-        resolve(0)
-      }
+    return new Promise<number>((resolve, reject) => {
+      HistoryUtil.readHistoryStore.get(comicId).then(r => {
+        let res = r as string
+        LogUtil.info(`查询到阅读Index：`, comicId, ' ', res)
+        let hisOrder = Number.parseInt(res.split(',')[0])
+        if (order === hisOrder) {
+          resolve(Number.parseInt(res.split(',')[1]))
+        } else {
+          resolve(0)
+        }
+      }).catch((err: Error) => {
+        reject(err)
+      })
     })
   }
 
   public static setRead(comicId: string, order: number, index: number = 0) {
+    LogUtil.info('记录阅读历史')
     HistoryUtil.readHistoryStore.put(comicId, `${order},${index}`).then(() => {
       LogUtil.info(`记录阅读历史成功：${comicId} - ${order} - ${index}`)
-    }).catch((err: Error) => {
-      LogUtil.error(`记录阅读历史失败：${comicId} - ${order} - ${index}`)
     })
   }
 
